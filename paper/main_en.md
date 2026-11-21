@@ -108,59 +108,99 @@ curve. Table (local token counts; official scores from the public board):
 
 The following subsections describe the structural advance of each record artifact.
 
-### 4.1 Record 1 (3,274): prescribed gaps and the weighted certificate
+### 4.1 Record 1 — 3,274 tokens (official 64.5332; site 3,089 tok, −85.7 %)
 
-The previous record holder used a window bound whose witness value was `x = 0` for all three evaluation
-heights and paid for the middle height with a large pole term. This artifact **prescribes the gap**: the
-witness zero is placed at a prescribed distance from the centre, so the middle window's `x` becomes a sharp
-`(5d)⁻¹` rather than `0`, and the 3–4–1 combination is rebalanced accordingly. The mathematical content is
-the observation that the classical argument does not need the zero to be *inside* the disk — it needs the
-*distance* to be controlled, and controlling it by prescription removes a case distinction in the assembly. On the benchmark site this artifact carries the technique label
-*Perron/Mellin contour simplification + grind automation*, and its paper-style derivation is titled
-*Borel–Carathéodory + analytic divided difference (`dslope`) recursive zero peeling*: it introduces
-`nld(f,z) = −Re(f′(z)/f(z))` and proves, by strong induction on `n` for `B < 2ⁿ`, the bound
-`x + nld(f,0) ≤ 24(log B + 1)`; the peeling step writes `g(w) = dslope(f,ρ₀)(w)`,
-`f(w) = (w−ρ₀)g(w)`, `f(0) = −ρ₀g(0)` and recurses with `B → B/2`.
+**(B) Bottleneck.** The reference formalization (Alpöge, 21 files) must produce the Landau-type estimate
+`−Re(f′/f)` for `ζ₁` near a putative zero by collecting *all* zeros in a disk into a finite product
+`Π(w−ρ)^{m(ρ)}`, proving per-factor derivative lemmas (`hasDerivAt_prod_sub_pow`) and shuttling hand-written
+Cauchy/Jensen estimates between files. The compressed artifact family replaced that library by five separate
+scalar lemmas — `landau` (873), `scaledWindow` (269), `triple` (248), `zeroHeight` (114), `poleTerm_le` (66)
+— plus a 643-token assembly, and these interfaces were what remained to be paid for.
 
-### 4.2 Record 2 (3,208): local certificate and the adaptive scale
+**(M) Derivation.** The proof introduces `nld(f,z) := −Re(f′(z)/f(z))` and replaces the zero product by a
+*strong induction on the growth constant*: for `f` entire on `B̄(0,1/2)`, `f(0) ≠ 0`, `‖f(w)‖ ≤ B‖f(0)‖`,
+and all zeros of `f` in `B̄(0,1/6)` satisfying `Re ρ ≤ 0`, one proves for every `n` with `B < 2ⁿ` that
 
-This artifact reorganizes the assembly around a **local certificate**: the low-height exclusion and the three
-window instantiations are derived inside the final theorem from the Mellin formula, rather than by separate
-lemmas with their own interfaces. Its mathematical step is the **adaptive scale** `a = Re s + 5d` with
-`d = 2⁻²⁰/log R`: the scale is tied to the *assumed* real part rather than to a fixed `1+4d`, so the witness
-distance is exactly `5d` for every candidate zero, and the two branch conditions (`a > 1` and `a − 1 ≥ 4d`)
-are discharged by the single premise `1 − d ≤ Re s`. (This artifact also required a formal repair: a `def`
-kept its body invisible to `linarith`, so the von Mangoldt certificate and the window bounds used
-syntactically different atoms of the same quantity; a `change` re-expressed the certificate in the goal's
-atoms. The mathematical statement was unaffected.)
+```
+x + nld(f,0) ≤ 24·(log B + 1),      x = 0 or x = Re((−ρ)⁻¹) for a zero ρ ∈ B̄(0,1/6).
+```
 
-### 4.3 Record 3 (3,065): root-window reorganization
+Peeling step: at a zero `ρ₀` put `g(w) := dslope(f,ρ₀)(w)`, so `f(w) = (w−ρ₀)g(w)` and `f(0) = −ρ₀g(0)`;
+the growth constant of `g` is *exactly half* that of `f`, `B → B/2` (the distance to `ρ₀` cancels one factor
+in the maximum-modulus bound), and the induction continues on `g`. Terminal step: if the inner disk is
+zero-free, `f` has an analytic logarithm `u` with `Re u ≤ log B`, and Borel–Carathéodory gives
+`|u′(0)| ≤ 2(Re u(0))/R`; a Lipschitz estimate converts this into the bound for `nld(f,0)`.
 
-The third artifact consolidates the two functions that the low-height exclusion serves — bounding the pole
-terms and excluding zeros in the inner disk — into a single **root window** applied once at the pole `s = 1`
-side rather than at each height. Structurally this removes one instantiation of the window lemma and one
-`have`-block of arithmetic; mathematically it exploits that the only information needed about the middle
-height is an upper bound on `Re(((a+i·Im s) −1)⁻¹)`, which follows from `|Im s| ≥ 1/2` without a separate
-window.
+**(C) Why the ratio.** The peeling lemma (873 tokens) replaces the reference's entire zero-factorization
+library; the second large replacement is the Mellin growth bound (≈742 tokens) which, as the ablation in §5
+shows, costs ≈50 % less than the Euler–Maclaurin route. The platform records this artifact at **3,089 site
+tokens = −85.7 %**, with the technique label *Perron/Mellin contour simplification + grind automation* and a
+paper-style derivation titled *Borel–Carathéodory + analytic divided difference (`dslope`) recursive zero
+peeling*; the record moment and that derivation are archived in `evidence/figures/`.
 
-### 4.4 Record 4 (3,014): fused windows and sharp pole bounds
+### 4.2 Record 2 — 3,208 tokens (official 64.64; site 3,024 tok, −86.0 %)
 
-This artifact **fuses** the window lemma into the assembly and replaces the crude pole bound
-`Re((z−1)⁻¹) ≤ 2` by the sharp `Re((z−1)⁻¹) ≤ |Im z|⁻¹` (via `re_le_norm`, `norm_inv`, `abs_im_le_norm`).
-The mathematical gain is a sharper constant in the assembly: the pole terms are bounded by `|γ|⁻¹ ≤ 2` and
-by `(2|γ|)⁻¹`, and the low-height information is used directly in the inequality chain rather than through a
-lemma interface. Measured consequence: the final theorem's body is 1,084 tokens and there is no separate
-window lemma.
+**(B) Bottleneck.** After record 1, the largest removable interface was the 3–4–1 certificate held as a
+separate lemma `triple` (248 tokens): its statement, its proof of the pointwise inequality
+`3 + 4cos θ + cos 2θ ≥ 0`, and the instantiation in the assembly all pay interface cost, and the assembly
+(643) had to refer to it by name.
 
-### 4.5 Record 5 (2,931): a single complex identity
+**(M) Derivation.** The certificate is a *termwise* statement: the von Mangoldt series has terms
+`Λ(n)n^{−a}(3 + 4cos(t log n) + cos(2t log n)) ≥ 0`. Hence it can be produced inside the assembly as a single
+`HasSum.nonneg` object, with no separate lemma; and the two uses of the quantity `D(z) = Re Σ Λ(n)n^{−z}`
+(the certificate and the window bounds) are made to speak about the same atoms by a `change` step — a `def`
+keeps its body invisible to `linarith`, so the certificate's `(LSeries …).re` atoms must be re-expressed as the
+`D` atoms of the goal. (This atom mismatch is also why the un-repaired 3,179-token precursor did not compile.)
 
-The record artifact replaces the last remaining pair of separate derivations — the entire formula and the
-zero exclusion near `s = 1` — by one **complex identity** carried through the assembly, so that the growth
-bound, the low-height exclusion and the von Mangoldt substitution all read off the same `remainder` object.
-Structurally: 16 top-level blocks, of which the assembly is 1,038 tokens, the peeling lemma 872, the Mellin
-module 742, and the bridge 78; the rest (201 tokens) is witness/Mellin glue. The technique was distilled by
-the benchmark site as `core1_borel_dslope`, reproduced verbatim in §5.
+**(C) Why the ratio.** Measured: `triple` (248) disappears, the assembly grows 643 → 819 (+176), the `D`
+abbreviation grows 21 → 27 (+6): net **−66** tokens, 3,274 → 3,208.
 
+### 4.3 Record 3 — 3,065 tokens (official 64.8928; site 2,762 tok, −87.2 %)
+
+**(B) Bottleneck.** Two auxiliary lemmas still duplicated information already contained in the Mellin
+identity: `zeroHeight` (114) excluded zeros with `Re z ∈ (3/4,1)` and `|Im z| ≤ 1/2`, and `poleTerm_le` (66)
+gave the crude bound `Re((z−1)⁻¹) ≤ 2`; both were stated, proved and instantiated separately.
+
+**(M) Derivation.** The Mellin identity gives the low-height exclusion *directly*: `ζ₁(z) = 0` implies
+`(z−1)R(z) = 1`, hence `Re z ≤ |z−1|`; combined with `Re z ≥ 3/4` this yields `|Im z| ≥ 1/2` in a few lines
+inside the assembly. The same identity yields a *sharp* pole bound:
+`Re((a+iγ−1)⁻¹) = (a−1)/((a−1)²+γ²) ≤ 5d/((4d)² + 1/4) ≤ 20d`, so the crude `≤ 2` lemma is unnecessary.
+Both facts are thus consequences of the `remainder` object one already carries.
+
+**(C) Why the ratio.** Measured: `zeroHeight` (114) and `poleTerm_le` (66) disappear, the assembly grows
+819 → 876 (+57): net **−143** tokens, 3,208 → 3,065.
+
+### 4.4 Record 4 — 3,014 tokens (official 64.98; site 2,842 tok, −86.9 %)
+
+**(B) Bottleneck.** The window estimate survived as a lemma `scaledWindow` (263 tokens) with its own
+statement and *three* instantiations (heights `0`, `Im s`, `2·Im s`); each instantiation paid interface and
+argument-passing cost, and the assembly (876) had to name it.
+
+**(M) Derivation.** The window estimate is an application of the peeling lemma at three centres
+`a + iv` with growth ratio `B = R⁸/‖ζ₁(a+iv)‖`; since the growth hypothesis (`entireGrowth` on `Re ≥ 1/2`)
+and the sharp pole inequality of record 3 are the same for all three centres, the three applications can be
+inlined and share those two arguments. Mathematically nothing changes; the three uses become three
+`have`-bindings of one lemma applied inline.
+
+**(C) Why the ratio.** Measured: `scaledWindow` (263) disappears, the assembly grows 876 → 1,084 (+208):
+net **−51** tokens, 3,065 → 3,014.
+
+### 4.5 Record 5 — 2,931 tokens (official 65.1339; site 2,762 tok, −87.2 %)
+
+**(B) Bottleneck.** The bridge `good` (94 tokens) and the abbreviation `D` (21 tokens) still mediated between
+the Mellin/peeling results and the assembly: the logarithmic-derivative form
+`ζ₁′/ζ₁ = (z−1)⁻¹ − Σ Λ(n)n^{−z}` was proved as one statement and `D` was one more object the arithmetic had
+to pass through.
+
+**(M) Derivation.** The assembly is reorganized around a *single normalized complex identity*: the entire
+formula `ζ₁(s) = s(1 − (s−1)R(s))` is the only place where `ζ₁` is expanded, and the bridge is reduced to
+substituting the von Mangoldt identity into the assembly's own expression, so the split into a named bridge
+lemma plus a `D` abbreviation becomes unnecessary — the arithmetic works directly with the real parts of
+`LSeries (Λ)`.
+
+**(C) Why the ratio.** Measured: `good` 94 → 78 (−16), `D` disappears (−21), the assembly 1,084 → 1,038
+(−46): net **−83** tokens, 3,014 → 2,931. The 2,931-token file is 16 top-level blocks: assembly 1,038,
+peeling 872, Mellin module 742, bridge 78, witness/glue 201.
 ### 4.6 The published technique
 
 > **`core1_borel_dslope` — "Borel–Carathéodory + Divided-Difference (DSlope) Zero Factorization"**
