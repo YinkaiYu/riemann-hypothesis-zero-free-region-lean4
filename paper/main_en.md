@@ -249,6 +249,10 @@ submissions — all with `kept = true` — are the subject of this section.
 | 3 | 96281 | 3,065 | 64.8928 | 86.64 | `Lean/record-96281/` |
 | 4 | 96282 | 3,014 | 64.9800 | 86.87 | `Lean/record-96282/` |
 | 5 | 96283 | 2,931 | 65.1339 | 87.24 | `Lean/smallest-scored-96283/` |
+| 6 | 96286 | 2,843 | 65.2900 | 87.59 | `Lean/smallest-verified/` |
+| 7 | 96293 | 2,578 | 65.8000 | 88.80 | `Lean/record-96293-v25/` |
+| 8 | 96295 | 2,543 | 65.8700 | 88.97 | intermediate variant of the v26 lineage |
+| 9 | 96308 | 2,536 | 65.8834 | 88.99 | `Lean/record-96308-v26/` |
 
 Each subsection below states the bottleneck of the artifact that was replaced, the mathematical idea that
 removed it, and the measured effect on the token count. The component sizes quoted are reproducible with
@@ -371,7 +375,7 @@ evidence that the compression we report is structural rather than cosmetic.
 
 ## 6 Official evaluation
 
-The five artifacts of section 4 form the record sequence: the official score rises from 64.5332 to 64.6400,
+The artifacts of section 4 form the record sequence: the official score rises from 64.5332 through 64.6400, 64.8928, 64.9800 and 65.1339 to 65.8834,
 64.8928, 64.9800 and finally 65.1339, while the running best compression percentage rises from 85.73 to
 86.03, 86.64, 86.87 and 87.24. All five carry the flag `kept = true`.
 

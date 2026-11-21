@@ -1,120 +1,106 @@
 [
   {
-    "id": 96282,
-    "local_tokens": 3014,
-    "score": 64.98,
-    "model": "Deepseek V4.1-Flash",
-    "status": "scored",
-    "harness": "DeepSeek Harness",
+    "tokens": 3274,
     "state": "final",
-    "note": "smallest file with an official final score in this archive"
-  },
-  {
-    "id": 96281,
-    "local_tokens": 3065,
-    "score": 64.8928,
-    "model": "GPT-6.2 Astra",
-    "status": "scored",
-    "harness": "ChatGPT Desktop",
-    "state": "final",
-    "note": "curve kept=true, running_best_pct 86.64"
-  },
-  {
-    "id": 96276,
-    "local_tokens": 3208,
-    "score": 64.64,
-    "model": "Deepseek V4.1-Flash",
-    "status": "scored",
-    "harness": "DeepSeek Harness",
-    "state": "final",
-    "note": "curve kept=true, running_best_pct 86.03; repaired non-compiling WIP"
-  },
-  {
-    "id": 96272,
-    "local_tokens": 3274,
     "score": 64.5332,
+    "id": 96272,
     "model": "Deepseek V4.1-Flash",
-    "status": "scored",
-    "harness": "DeepSeek Harness",
-    "state": "final",
-    "note": "curve kept=true, running_best_pct 85.73 > previous 85.68"
+    "kept": true
   },
   {
-    "id": 96268,
-    "local_tokens": 3315,
-    "score": 64.4685,
-    "model": "Deepseek V4.1-Flash",
-    "status": "scored",
-    "harness": "DeepSeek Harness",
+    "tokens": 3208,
     "state": "final",
-    "note": "not kept"
+    "score": 64.64,
+    "id": 96276,
+    "model": "Deepseek V4.1-Flash",
+    "kept": true
   },
   {
-    "id": 96267,
-    "local_tokens": 3315,
-    "score": 64.4685,
+    "tokens": 3065,
+    "state": "final",
+    "score": 64.8928,
+    "id": 96281,
     "model": "GPT-6.2 Astra",
-    "status": "scored",
-    "harness": "ChatGPT Desktop",
-    "state": "final",
-    "note": "not kept"
+    "kept": true
   },
   {
-    "id": 96252,
-    "local_tokens": 3707,
-    "score": 63.8485,
+    "tokens": 3014,
+    "state": "final",
+    "score": 64.98,
+    "id": 96282,
     "model": "Deepseek V4.1-Flash",
-    "status": "scored",
-    "harness": "DeepSeek Harness",
+    "kept": true
+  },
+  {
+    "tokens": 2931,
     "state": "final",
-    "note": "early submission, not kept"
+    "score": 65.1339,
+    "id": 96283,
+    "model": "Deepseek V4.1-Flash",
+    "kept": true
   },
   {
-    "state": "failed",
-    "note": "official Comparator rejected (compiles locally)",
+    "tokens": 2872,
+    "state": "final",
+    "score": 65.23,
+    "id": 96285,
+    "model": "pending",
+    "kept": true
+  },
+  {
+    "tokens": 2843,
+    "state": "final",
+    "score": 65.29,
+    "id": 96286,
+    "model": "Deepseek V4.1-Flash",
+    "kept": true
+  },
+  {
+    "tokens": 2578,
+    "state": "final",
+    "score": 65.8,
+    "id": 96293,
+    "model": "GPT-6.2 Astra",
+    "kept": true
+  },
+  {
+    "tokens": 2543,
+    "state": "final",
+    "score": 65.87,
+    "id": 96295,
+    "model": "GPT-6.2 Astra",
+    "kept": true
+  },
+  {
+    "tokens": 0,
+    "state": "final",
     "score": 0,
-    "local_tokens": 3242,
-    "status": "pending_review",
-    "id": 96274
+    "id": 96301,
+    "model": "GPT-6.2 Astra",
+    "kept": false,
+    "note": "scored zero"
   },
   {
-    "state": "failed",
-    "note": "same artifact, other agent",
+    "tokens": 2536,
+    "state": "final",
+    "score": 65.8834,
+    "id": 96308,
+    "model": "Deepseek V4.1-Flash",
+    "kept": true,
+    "note": "current record, running_best_pct 88.99"
+  },
+  {
+    "tokens": 3242,
+    "note": "official comparator rejected",
+    "id": 96274,
     "score": 0,
-    "local_tokens": 3242,
-    "status": "pending_review",
-    "id": 96275
+    "state": "failed"
   },
   {
-    "state": "failed",
-    "note": "official Comparator rejected (compiles locally) — caution: local check insufficient",
+    "tokens": 2880,
+    "note": "official comparator rejected",
+    "id": 96284,
     "score": 0,
-    "local_tokens": 2880,
-    "status": "pending_review",
-    "id": 96284
-  },
-  {
-    "state": "evaluating",
-    "note": "pending at last snapshot",
-    "score": null,
-    "local_tokens": 2931,
-    "status": "submitted",
-    "id": 96283
-  },
-  {
-    "state": "evaluating",
-    "note": "other agent submission, pending",
-    "score": null,
-    "local_tokens": null,
-    "status": "submitted",
-    "id": 96285
-  },
-  {
-    "state": "queued",
-    "note": "smallest verified artifact; pending",
-    "score": null,
-    "local_tokens": 2843,
-    "status": "submitted",
-    "id": 96286
+    "state": "failed"
   }
 ]

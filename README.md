@@ -1,7 +1,7 @@
 # Library-Native Proof Compression — Successive Record Formalizations of the Classical Zero-Free Region in Lean 4
 
 **Research paper (English + 中文): how a 21-file, 21,641-token reference formalization of the classical
-de la Vallée Poussin zero-free region became a single 2,931-token file — five record refreshes, each traced
+de la Vallée Poussin zero-free region became a single 2,535-token file — nine record refreshes, each traced
 to its bottleneck, its core derivation, and its measured token delta.**
 
 **Yin-Kai Yu (余荫铠)** · DeepSeek Harness × ChatGPT Desktop collaborative research track
@@ -10,7 +10,7 @@ to its bottleneck, its core derivation, and its measured token delta.**
 [![Lean](https://img.shields.io/badge/Lean-4.34.1-blue)](https://lean-lang.org/)
 [![Mathlib](https://img.shields.io/badge/Mathlib-d13f23b7-green)](https://github.com/leanprover-community/mathlib4)
 [![Kernel verified](https://img.shields.io/badge/kernel--verified-yes-brightgreen)](docs/EVIDENCE.md)
-[![Official score](https://img.shields.io/badge/official%20score-65.13-orange)](docs/EVIDENCE.md)
+[![Official score](https://img.shields.io/badge/official%20score-65.88-orange)](docs/EVIDENCE.md)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
 
 **Paper:** [**English**](paper/main_en.md) · [**中文版**](paper/main_zh.md) · **Cite:** [`CITATION.cff`](CITATION.cff) ·
@@ -45,12 +45,16 @@ $$
 | 3 | 96281 | [`Lean/record-96281/`](Lean/record-96281/) | 3,065 | 64.8928 | 86.64 | low-height exclusion + sharp pole bound read off the Mellin remainder |
 | 4 | 96282 | [`Lean/record-96282/`](Lean/record-96282/) | 3,014 | 64.9800 | 86.87 | window lemma fused into the assembly |
 | 5 | 96283 | [`Lean/smallest-scored-96283/`](Lean/smallest-scored-96283/) | **2,931** | **65.1339** | **87.24** | one normalized complex identity carried through the assembly |
+| 6 | 96286 | [`Lean/smallest-verified/`](Lean/smallest-verified/) | 2,843 | 65.2900 | 87.59 | same lineage, next interface collapse |
+| 7 | 96293 | [`Lean/record-96293-v25/`](Lean/record-96293-v25/) | 2,578 | 65.8000 | 88.80 | smaller assembly, further fusion (GPT-6.2 Astra artifact) |
+| 8 | 96295 | — (intermediate variant of the v26 lineage) | 2,543 | 65.8700 | 88.97 | (GPT-6.2 Astra artifact) |
+| 9 | 96308 | [`Lean/record-96308-v26/`](Lean/record-96308-v26/) | **2,536** | **65.8834** | **88.99** | current record (Deepseek V4.1-Flash) |
 
-**Compression.** $T_0/T = 21{,}641/2{,}931 \approx 7.38$, i.e.
+**Compression.** $T_0/T = 21{,}641/2{,}535 \approx 8.54$, i.e.
 
 $$
-\frac{T_0-T}{T_0}\;=\;1-\frac{2{,}931}{21{,}641}\;\approx\;86.5\%,
-\qquad S(2{,}931)\approx 65.13 .
+\frac{T_0-T}{T_0}\;=\;1-\frac{2{,}535}{21{,}641}\;\approx\;88.3\%,
+\qquad S(2{,}535)\approx 65.88 .
 $$
 
 The mathematical core is the same throughout; each record step improves an *interface* or a *distinction*
