@@ -25,14 +25,14 @@ $c>0$ such that
 
 $$
 \zeta(s)\neq 0 \qquad\text{whenever}\qquad
-\operatorname{Re}(s)\ \ge\ 1-\frac{c}{\log\!\big(|\operatorname{Im}(s)|+2\big)},\quad s\neq 1 .
+\mathrm{Re}(s)\ \ge\ 1-\frac{c}{\log(|\mathrm{Im}(s)|+2)},\quad s\neq 1 .
 $$
 
 The size measure is the normalized Lean 4 token count $T$ (comments, whitespace and `import` lines cost
 $0$; identifier length is ignored), with reference baseline $T_0 = 21{,}641$ and benchmark score
 
 $$
-S(T)\;=\;100-\frac{50}{\,1+\tfrac12\log_{10}\!\big(T_0/T\big)\,}.
+S(T)\;=\;100-\frac{50}{\,1+\frac{1}{2}\log_{10}(T_0/T)\,}.
 $$
 
 ## The record sequence (each refresh has `kept = true` on the public curve)
@@ -56,51 +56,51 @@ $$
 The mathematical core is the same throughout; each record step improves an *interface* or a *distinction*
 that the classical proof does not need:
 
-**(i) Mellin entire formula.** For $\operatorname{Re}(s)>0$,
+**(i) Mellin entire formula.** For $\mathrm{Re}(s)>0$,
 
 $$
-\zeta_1(s):=(s-1)\zeta(s)=s\bigl(1-(s-1)R(s)\bigr),\qquad
-\|R(s)\|\le \frac{1}{\operatorname{Re}(s)},
+\zeta_1(s):=(s-1)\zeta(s)=s(1-(s-1)R(s)),\qquad
+\|R(s)\|\le \frac{1}{\mathrm{Re}(s)},
 $$
 
 which yields both the polynomial growth bound
-$\|z\|\le 4R \Rightarrow \|\zeta_1(z)\|\le R^8$ on $\operatorname{Re}(z)\ge\tfrac12$ and a cheap zero
-exclusion: $\zeta_1(z)=0 \Rightarrow (z-1)R(z)=1 \Rightarrow \operatorname{Re}(z)\le|z-1|$, hence zeros
-with $\operatorname{Re}(z)\ge\tfrac34$ satisfy $|\operatorname{Im}(z)|\ge\tfrac12$.
+$\|z\|\le 4R \Rightarrow \|\zeta_1(z)\|\le R^8$ on $\mathrm{Re}(z)\ge\frac{1}{2}$ and a cheap zero
+exclusion: $\zeta_1(z)=0 \Rightarrow (z-1)R(z)=1 \Rightarrow \mathrm{Re}(z)\le|z-1|$, hence zeros
+with $\mathrm{Re}(z)\ge\frac{3}{4}$ satisfy $|\mathrm{Im}(z)|\ge\frac{1}{2}$.
 
-**(ii) Recursive zero peeling.** Put $\operatorname{nld}(f,z):=-\operatorname{Re}\!\bigl(f'(z)/f(z)\bigr)$.
-For entire $f$ on $\overline{B}(0,\tfrac12)$ with $f(0)\neq 0$, growth
-$\|f(w)\|\le B\|f(0)\|$, and all zeros in $\overline{B}(0,\tfrac16)$ in the closed left half-plane,
+**(ii) Recursive zero peeling.** Put $\mathrm{nld}(f,z):=-\mathrm{Re}(f'(z)/f(z))$.
+For entire $f$ on $\overline{B}(0,\frac{1}{2})$ with $f(0)\neq 0$, growth
+$\|f(w)\|\le B\|f(0)\|$, and all zeros in $\overline{B}(0,\frac{1}{6})$ in the closed left half-plane,
 
 $$
-x+\operatorname{nld}(f,0)\;\le\;24\log B+24 ,
-\qquad x=0 \ \text{or}\ x=\operatorname{Re}\!\bigl((-\rho)^{-1}\bigr)\ \text{for a zero } \rho .
+x+\mathrm{nld}(f,0)\;\le\;24\log B+24 ,
+\qquad x=0 \ \text{or}\ x=\mathrm{Re}((-\rho)^{-1})\ \text{for a zero } \rho .
 $$
 
 The proof is a strong induction on $n$ with $B<2^n$, whose peeling step at a zero $\rho_0$ is
 
 $$
-g(w):=\operatorname{dslope}(f,\rho_0)(w),\qquad
+g(w):=\mathrm{dslope}(f,\rho_0)(w),\qquad
 f(w)=(w-\rho_0)\,g(w),\qquad f(0)=-\rho_0\,g(0),
 $$
 
 and the growth constant of $g$ is *exactly half* that of $f$, $B\mapsto B/2$; the terminal branch is the
 Borel–Carathéodory estimate for the logarithm.
 
-**(iii) Assembly.** With $R=|\operatorname{Im}s|+2$, $d=2^{-20}/\log R$ and the adaptive scale
-$a:=\operatorname{Re}s+5d$, the witness zero sits exactly $5d$ from the centre, so $x=(5d)^{-1}$ is sharp;
-$\operatorname{Re}s\ge 1-d$ gives $a-1\ge 4d$, and the pole terms are
+**(iii) Assembly.** With $R=|\mathrm{Im}s|+2$, $d=2^{-20}/\log R$ and the adaptive scale
+$a:=\mathrm{Re}s+5d$, the witness zero sits exactly $5d$ from the centre, so $x=(5d)^{-1}$ is sharp;
+$\mathrm{Re}s\ge 1-d$ gives $a-1\ge 4d$, and the pole terms are
 
 $$
-\operatorname{Re}\!\bigl((a+i\gamma-1)^{-1}\bigr)=\frac{a-1}{(a-1)^2+\gamma^2}
-\;\le\;\frac{5d}{(4d)^2+\tfrac14}\;\le\;20d .
+\mathrm{Re}((a+i\gamma-1)^{-1})=\frac{a-1}{(a-1)^2+\gamma^2}
+\;\le\;\frac{5d}{(4d)^2+\frac{1}{4}}\;\le\;20d .
 $$
 
 The 3–4–1 inequality ($3+4\cos\theta+\cos2\theta\ge 0$, via Mathlib's
 `norm_LFunction_product_ge_one`) then yields the negative margin
 
 $$
-\Bigl(\tfrac45-\tfrac34\Bigr)\frac1d \;=\;\frac{0.05}{d}\;\ge\;5\cdot 10^{4}\log R
+(\frac{4}{5}-\frac{3}{4})\frac1d \;=\;\frac{0.05}{d}\;\ge\;5\cdot 10^{4}\log R
 \qquad\text{against an error budget of}\quad \mathcal{O}(\log R),
 $$
 
