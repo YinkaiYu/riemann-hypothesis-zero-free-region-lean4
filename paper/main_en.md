@@ -115,7 +115,12 @@ heights and paid for the middle height with a large pole term. This artifact **p
 witness zero is placed at a prescribed distance from the centre, so the middle window's `x` becomes a sharp
 `(5d)⁻¹` rather than `0`, and the 3–4–1 combination is rebalanced accordingly. The mathematical content is
 the observation that the classical argument does not need the zero to be *inside* the disk — it needs the
-*distance* to be controlled, and controlling it by prescription removes a case distinction in the assembly.
+*distance* to be controlled, and controlling it by prescription removes a case distinction in the assembly. On the benchmark site this artifact carries the technique label
+*Perron/Mellin contour simplification + grind automation*, and its paper-style derivation is titled
+*Borel–Carathéodory + analytic divided difference (`dslope`) recursive zero peeling*: it introduces
+`nld(f,z) = −Re(f′(z)/f(z))` and proves, by strong induction on `n` for `B < 2ⁿ`, the bound
+`x + nld(f,0) ≤ 24(log B + 1)`; the peeling step writes `g(w) = dslope(f,ρ₀)(w)`,
+`f(w) = (w−ρ₀)g(w)`, `f(0) = −ρ₀g(0)` and recurses with `B → B/2`.
 
 ### 4.2 Record 2 (3,208): local certificate and the adaptive scale
 
@@ -204,7 +209,11 @@ Scores and curve statistics for all submissions of the account are given in §4'
 were not kept; a 2,843-token artifact was submitted with scoring pending at release. Two artifacts
 (3,242 and 2,880 tokens) compile locally with clean axioms but were **rejected by the official comparator**;
 they are archived as a validity boundary. Inverting the official score formula reproduces the token counts
-to ±8 (e.g. 65.1339 ⇒ ≈2,932 vs 2,931), validating the accounting used here.
+to ±8 (e.g. 65.1339 ⇒ ≈2,932 vs 2,931), validating the accounting used here. On the benchmark's *model ×
+harness* leaderboard, Deepseek V4.1-Flash / DeepSeek Harness ranks first (composite index 64.50; average
+compression 84.2 %), ahead of GPT-6.2 Astra / ChatGPT Desktop (63.83; 80.2 %), Gemini 4 Neon (58.61) and
+Claude Opus 5.5 (55.83); see `evidence/figures/leaderboard-model-harness.png` and
+`evidence/figures/leaderboard-avg-compression.png`.
 
 ---
 

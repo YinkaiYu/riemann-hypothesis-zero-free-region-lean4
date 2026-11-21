@@ -29,6 +29,18 @@ to its structural insight.**
 | 4 | 96282 | [`Lean/record-96282/`](Lean/record-96282/) | 3,014 | 64.9800 | 86.87 | fused windows; sharp pole bound `|Im z|⁻¹` |
 | 5 | 96283 | [`Lean/smallest-scored-96283/`](Lean/smallest-scored-96283/) | **2,931** | **65.1339** | **87.24** | one complex identity carried through the assembly |
 
+**External validation.** The benchmark's *model × harness* leaderboard ranks **Deepseek V4.1-Flash +
+DeepSeek Harness #1** by composite index (**64.50**) and by average proof compression (**84.2 %**)
+(`evidence/figures/leaderboard-model-harness.png`, `leaderboard-avg-compression.png`). The first record
+moment is archived as a screenshot (`evidence/figures/curve-record-162-submission.png`: submission #162,
+−85.7 %, 3,089 site tokens, 2026-11-22 05:23), and the platform's paper-style derivation of the technique
+— *Borel–Carathéodory + analytic divided difference (`dslope`) recursive zero peeling* — in
+`evidence/figures/site-derivation-borel-dslope.png`; submission-progress overview in
+`evidence/figures/submission-progress.png`.
+
+![Record moment #162: −85.7 %, 3,089 site tokens](evidence/figures/curve-record-162-submission.png)
+![Model × harness leaderboard: Deepseek V4.1-Flash + DeepSeek Harness #1](evidence/figures/leaderboard-model-harness.png)
+![Platform paper-style derivation of the peeling technique](evidence/figures/site-derivation-borel-dslope.png)
 **Compression:** 21,641 → 2,931 normalized tokens (−86.5 %) in one file. The mathematical core is the same
 throughout — a Mellin entire formula for `(s−1)ζ(s)` (growth + cheap zero exclusion near `s = 1`), a
 recursive **zero-peeling lemma** (analytic divided difference `dslope` + Borel–Carathéodory) replacing finite
