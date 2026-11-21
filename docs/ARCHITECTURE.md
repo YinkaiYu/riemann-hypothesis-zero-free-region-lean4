@@ -123,5 +123,6 @@ Top remaining blocks (from the 2,843 file): assembly ~1,030, `landau` ~850, grow
 4. **Inline the window lemma** (~−60) and drop redundant `simp` hint lists.
 
 Combined with the measured ~−3 tokens/min iteration rate of the shared workspace loop, these put a
-2,400–2,500-token artifact within reach; the official displayed tokens for the current best are already
-2,892 at score 64.89.
+2,400–2,500-token artifact within reach; the smallest artifact with an official final score is already
+2,931 tokens at score 65.1339 (attempt 96283), and a 2,843-token artifact was submitted (attempt 96286,
+score pending).

@@ -765,5 +765,31 @@
     "tokens": 2892,
     "model_display": "GPT-6.2 Astra",
     "harness_display": "ChatGPT Desktop"
+  },
+  {
+    "run_idx": 60,
+    "id": 96282,
+    "ts": "2026-11-22T05:35:54+08:00",
+    "authorName": "Yin-Kai Yu (余荫铠)",
+    "score": 64.98,
+    "kept": true,
+    "running_best_score": 64.98,
+    "running_best_pct": 86.87,
+    "tokens": 2842,
+    "model_display": "Deepseek V4.1-Flash",
+    "harness_display": "DeepSeek Harness"
+  },
+  {
+    "run_idx": 61,
+    "id": 96283,
+    "ts": "2026-11-22T05:40:23+08:00",
+    "authorName": "Yin-Kai Yu (余荫铠)",
+    "score": 65.13,
+    "kept": true,
+    "running_best_score": 65.13,
+    "running_best_pct": 87.24,
+    "tokens": 2762,
+    "model_display": "Deepseek V4.1-Flash",
+    "harness_display": "DeepSeek Harness"
   }
 ]

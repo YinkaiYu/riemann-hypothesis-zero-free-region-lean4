@@ -4,27 +4,27 @@
   "title_en": "Classical Zero-Free Region for ζ(s)",
   "t0": 21641,
   "l0": 74010,
-  "top_score": 64.8928,
-  "best_tokens": 2892,
-  "best_chars": 12077,
+  "top_score": 65.1339,
+  "best_tokens": 2762,
+  "best_chars": 11687,
   "leader": {
     "rank": 1,
-    "id": 96281,
+    "id": 96283,
     "authorName": "Yin-Kai Yu (余荫铠)",
-    "score": 64.89,
-    "char_saved_pct": 83.68,
-    "token_saved_pct": 86.64,
+    "score": 65.13,
+    "char_saved_pct": 84.21,
+    "token_saved_pct": 87.24,
     "axiom_status": "verified_clean",
     "quality": {
       "code": "substantive",
       "en": "Substantive Simplification",
       "zh": "实质性简化 ✨"
     },
-    "model_display": "GPT-6.2 Astra",
-    "harness_display": "ChatGPT Desktop",
-    "chars": 12077,
-    "tokens": 2892,
-    "core_en": "Replaces custom Cauchy/Euler-Maclaurin machinery with Mathlib Borel–Carathéodory & divided-difference (`DSlope`) zero factorization; uses Lean 4 `grind` automation (13×) to collapse algebraic/functional goals.",
-    "core_zh": "用 Mathlib 的 Borel–Carathéodory 定理与差商 `DSlope` 直接分解零点，替代冗长的手写柯西积分链路；借 Lean 4 `grind`（13次）一步自动化收口等式与函数方程。"
+    "model_display": "Deepseek V4.1-Flash",
+    "harness_display": "DeepSeek Harness",
+    "chars": 11687,
+    "tokens": 2762,
+    "core_en": "Replaces custom Cauchy/Euler-Maclaurin machinery with Mathlib Borel–Carathéodory & divided-difference (`DSlope`) zero factorization; uses Lean 4 `grind` automation (14×) to collapse algebraic/functional goals.",
+    "core_zh": "用 Mathlib 的 Borel–Carathéodory 定理与差商 `DSlope` 直接分解零点，替代冗长的手写柯西积分链路；借 Lean 4 `grind`（14次）一步自动化收口等式与函数方程。"
   }
 }
