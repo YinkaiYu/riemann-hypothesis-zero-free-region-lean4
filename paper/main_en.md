@@ -1,177 +1,165 @@
-# Why It Fits: The Mathematical Structure of a 2,931-Token Lean 4 Proof of the Classical Zero-Free Region
+# Library-Native Proof Compression: Successive Record Formalizations of the Classical Zero-Free Region in Lean 4
 
 **Yin-Kai Yu (余荫铠)**
 
 *DeepSeek Harness × ChatGPT Desktop collaborative research track · Artifact release v1.0 · 2026-11-22*
 <https://github.com/YinkaiYu/riemann-hypothesis-zero-free-region-lean4>
 
-> **Published technique.** The core device of this proof was distilled on the public benchmark site as
-> technique `core1_borel_dslope` — *Borel–Carathéodory + Divided-Difference (DSlope) Zero Factorization* —
-> created for submission **96283** under this account. §5 reproduces that note verbatim (English and
-> Chinese) and develops the mathematics behind it.
-
 ---
 
 ## Abstract
 
-The classical zero-free region of the Riemann zeta function is a textbook theorem whose reference Lean 4
-formalization occupies 21 files and 21,641 normalized tokens. We explain the mathematics of a proof of the
-same theorem that fits in **one file of 2,931 tokens** and holds the record on the public proof-compression
-board (official score 65.1339, curve flag `kept = true`). The compression is not cosmetic; it comes from
-replacing four pieces of re-derived analysis by *structure*: (i) a Mellin entire formula for `(s−1)ζ(s)`
-that yields simultaneously the polynomial growth bound and a two-line zero exclusion near `s = 1`;
-(ii) a recursive **zero-peeling lemma** — factor a zero through Mathlib's analytic divided difference
-`dslope`, recurse with a halved growth constant, close with Borel–Carathéodory — that replaces the
-reference's finite zero products and Cauchy integrals by a single 872-token induction;
-(iii) a von Mangoldt bridge converting growth estimates into the classical 3–4–1 inequality; and
-(iv) an **adaptive scale** `a = Re s + 5d`, `d = 2⁻²⁰/log R`, which makes the witness zero sit exactly `5d`
-from the centre and removes three constant-case distinctions. We give the component-by-component token
-account, an ablation showing the natural Euler–Maclaurin route costs ≈50 % more, and the arithmetic margins
-that make the final `linarith` inevitable. The lesson is general: **formal-proof size in analytic number
-theory is dominated by re-derivation, and library-native reformulation is the compression.**
+The classical zero-free region of the Riemann zeta function is proved in a few pages in every analytic
+number theory textbook, yet its reference Lean 4 formalization spans 21 files and 21,641 normalized tokens.
+We report a program of **library-native proof compression**: replacing re-derived analytic machinery by
+Mathlib primitives until the same theorem fits in a single file, and we analyze the mathematical structure
+of each successive record artifact. Over five record refreshes on the public compression board
+(official scores 64.5332 → 64.6400 → 64.8928 → 64.9800 → 65.1339, all with curve flag `kept = true`), the
+artifact shrank 3,274 → 3,208 → 3,065 → 3,014 → **2,931 tokens** (−86.5 % relative to the baseline). Each
+step is traced to a specific structural insight: a recursive zero-peeling lemma replacing finite zero
+products and contour estimates; a Mellin entire formula yielding both the growth bound and a cheap zero
+exclusion; an adaptive scale `a = Re s + 5d`, `d = 2⁻²⁰/log R` that makes every estimate crude yet decisive;
+and successive fusions of the window/assembly interface. We give component-level token accounting, an
+ablation showing the Euler–Maclaurin growth route costs ≈50 % more than the Mellin route, and the official
+evaluation including two artifacts rejected despite compiling locally.
 
-**Keywords:** formalized analysis · proof compression · Lean 4 · Mathlib · zero-free region ·
+**Keywords:** formalized analysis · Lean 4 · Mathlib · proof compression · zero-free region ·
 analytic divided differences · Borel–Carathéodory inequality
 
 ---
 
 ## 1 Introduction
 
-A textbook theorem can be a large formal artifact. The classical de la Vallée Poussin zero-free region —
-`∃ c > 0` such that `ζ(s) ≠ 0` whenever `Re(s) ≥ 1 − c/log(|Im s|+2)` — is proved in a few pages in
-Titchmarsh [5] or Montgomery–Vaughan [6], yet its reference Lean 4 formalization [12] (the closure of
-`src/Formalism/ZeroFreeRegion/FinalZFR.lean`) is 21 files, 74,010 characters, **21,641 normalized tokens**
-[13]. Modern benchmarks [13] measure exactly this quantity, because it is a proxy for how much
-*mathematical structure* a proof exposes: comments and identifier names are free, so only genuine
-restructuring lowers the count.
+The size of a formal proof is an engineering quantity with mathematical content. In a proof that follows a
+textbook argument, most of the size is spent on *machinery*: estimates re-derived, zero sets enumerated,
+integrals bounded. Modern libraries make much of that machinery available, so a proof written in library
+terms can be an order of magnitude smaller than one that re-derives it. The public proof-compression
+benchmark used here makes the quantity explicit: the statement is frozen, the environment is fixed
+(Lean 4.34.1 + Mathlib), and the score depends on the normalized Lean token count `T` of the submission,
+with comments and identifier names free [13]. The reference closure of the target occupies 21 files and
+`T₀ = 21,641` tokens.
 
-This paper explains the mathematics that takes this theorem from 21,641 to **2,931 tokens** (−86.5 %): the
-proof whose official submission (96283) holds the record on the public curve (score 65.1339, `kept = true`,
-`running_best_pct` 87.24) and whose submission lineage produced five consecutive record refreshes. The
-thesis is quantitative and structural:
-
-> The reference formalization is large because it **re-derives** analytic machinery — zero factorization,
-> contour estimates, Euler–Maclaurin expansions — that Mathlib already contains in library form. Replacing
-> each re-derivation with the corresponding library primitive, and reorganizing the final assembly around a
-> single adaptive scale, compresses the proof by an order of magnitude **without weakening the statement**.
-
-The remainder of the paper develops each component mathematically (§4–§5), proves the numerical margins
-(§6), and accounts for the tokens (§7).
+This paper reports a sequence of compressions that set the record five times, and — the point of the paper —
+explains the **mathematical structure** of each step. §4 fixes the mathematical core; §5 walks through the
+five record artifacts, in the order they were accepted, identifying for each the structural change and its
+measured token consequence; §6 summarizes the compression mechanisms and quantifies them.
 
 ---
 
-## 2 Setting
+## 2 Setting and measurement
 
-The frozen target, evaluated in Lean 4.34.1 [7] on Mathlib commit `d13f23b7…` [8] by an official
-replay-based comparator with permitted axioms `{propext, Quot.sound, Classical.choice}`:
-
-```lean
-theorem AlpogeRHCore1.zeroFreeRegion :
-    ∃ c : ℝ, 0 < c ∧ ∀ s : ℂ, s ≠ 1 →
-      1 - c / Real.log (|s.im| + 2) ≤ s.re → riemannZeta s ≠ 0
-```
-
-The size measure is the **normalized token count** `T` (comments, whitespace, `import` lines: 0 tokens;
-identifiers: 1 token each), baseline `T₀ = 21,641`; the benchmark score is
-`100 − 50/(1 + 0.5·log₁₀(T₀/T))`. Our local meter reproduces the official count to ±8 tokens on every
-scored submission (§8.3), so token accounting below is reliable.
+Target (frozen): `∃ c > 0, ∀ s ≠ 1, 1 − c/log(|Im s|+2) ≤ Re s ⇒ ζ(s) ≠ 0`, the classical de la Vallée
+Poussin region [3] underlying the Prime Number Theorem with error term and Landau–Page theory [4,5].
+Verification: Lean 4.34.1 [7] + Mathlib commit `d13f23b7…` [8], official replay comparator, permitted axioms
+`{propext, Quot.sound, Classical.choice}`, no `sorry`. Metric: normalized tokens `T` with
+`Score(T) = 100 − 50/(1 + 0.5·log₁₀(T₀/T))`. Our local meter reproduces the official count to ±8 tokens
+(§7.3), so the accounting below is comparable to official numbers.
 
 ---
 
-## 3 The mathematical skeleton
+## 3 The mathematical core
 
-Write `ζ₁(s) := (s−1)ζ(s)`, which is entire. The classical argument has three steps:
+Write `ζ₁(s) = (s−1)ζ(s)` (entire). Every version in §5 shares the same three-step skeleton.
 
-**(S1) A growth bound.** For a point `z` with `1 < Re z` and `|Im z| ≤ 2R` (`R = |Im s| + 2`),
-control `‖ζ₁‖` on disks of radius `1/2` around `z`, by a polynomial in `R`.
+**(S1) Growth.** Control `‖ζ₁‖` on disks of radius `1/2` around points `z` with `1 < Re z`, `|Im z| ≤ 2R`
+(`R = |Im s|+2`), polynomially in `R`.
 
-**(S2) A logarithmic-derivative bound.** If `−Re(f′/f)(0)` is large and negative (a zero close to `0`),
-then `f` must grow quickly. Quantitatively (`x = 0` or a witness zero at distance `≤ 1/6`):
+**(S2) Logarithmic derivative.** With `f := ζ₁(z + ·)` on `|w| ≤ 1/2` and a witness zero `ρ` (`|ρ| ≈ 5d`):
+`x − Re(f′/f)(0) ≤ C(log B + 1)`, where `B` bounds `‖f‖` on the disk and `x = 0` or `x ≤ Re((−ρ)⁻¹)`.
 
-```
-x − Re(f′/f)(0) ≤ 24·(log B + 1),      where ‖f w‖ ≤ B‖f 0‖ on |w| ≤ 1/2.
-```
+**(S3) 3–4–1.** For `a > 1`, all `t`: `3D(a) + 4D(a+t) + D(a+2t) ≥ 0`, `D(z) = Re Σ Λ(n)n^{−z}`, i.e.
+`3 + 4cos θ + cos 2θ ≥ 0`.
 
-**(S3) The 3–4–1 inequality.** For `a > 1` and all `t`,
-`3D(a) + 4D(a+t) + D(a+2t) ≥ 0`, `D(z) = Re Σ Λ(n)n^{−z}`, equivalently `3 + 4cos θ + cos 2θ ≥ 0`.
+All five record artifacts implement (S1) by a Mellin entire formula, (S2) by a recursive peeling lemma, and
+(S3) by Mathlib's product inequality; what changes across versions is the *interface* between these parts
+and the arithmetic assembly. The shared core is:
 
-The reference formalization implements (S1) with Euler–Maclaurin expansions and Cauchy integrals, and (S2)
-with a finite zero product. We instead derive (S1) from a Mellin formula (§4), implement (S2) as a recursion
-(§5), and obtain (S3) from a library identity (§6). The final assembly (§6.3) is then a few dozen lines.
-
----
-
-## 4 The growth bound and the zero exclusion: one Mellin identity
-
-Let `fract` be the fractional-part function and `R(s) = mellin(fract·1_{>1})(−s)`. The Mellin transform of
-the tail gives, for `Re s > 0`:
-
-```lean
-lemma entireFormula (hs : 0 < s.re) : riemannZeta₁ s = s * (1 - (s-1) * remainder s)
-lemma mellin_bound (hs : 0 < s.re) : ‖remainder s‖ ≤ 1 / s.re
-```
-
-*Proof.* For `Re s > 1`, split the Mellin integral of `ζ` at `1` and integrate by parts: the fractional part
-appears, and the identity holds. Both sides are analytic on the preconnected domain `{Re > 0}`; by the
-identity theorem it extends. ◻
-
-Two consequences, both cheap (≈715 tokens total):
-1. **Growth**: for `Re z ≥ 1/2` and `‖z‖ ≤ 4R`, `‖ζ₁ z‖ ≤ R⁸` (from `‖remainder‖ ≤ 1/Re z`). This is (S1).
-2. **Zero exclusion near 1**: if `ζ₁(z) = 0` then `(z−1)R(z) = 1`, so `Re z ≤ |z−1|`. Combined with
-   `Re z ≥ 3/4` this forces `|Im z| ≥ 1/2` — precisely the low-height control that (S3) needs at the middle
-   evaluation height.
-
-The reference instead proves these via explicit Euler–Maclaurin expansions; the Mellin identity costs a
-third of that (§7.2).
+* **Mellin formula.** For `Re s > 0`, `ζ₁(s) = s(1 − (s−1)R(s))` with `‖R(s)‖ ≤ 1/Re s`. It gives (S1)
+  (`‖ζ₁ z‖ ≤ R⁸` for `Re z ≥ 1/2`, `‖z‖ ≤ 4R`) and a zero exclusion near `s = 1`: `ζ₁(z)=0 ⇒ Re z ≤ |z−1|`,
+  hence zeros with `Re z ≥ 3/4` satisfy `|Im z| ≥ 1/2`.
+* **Peeling lemma.** For entire `f` with `f 0 ≠ 0`, growth constant `B` on `|w| ≤ 1/2`, zeros in the closed
+  left half-plane, and a witness zero in `|ρ| ≤ 1/6`: `x − Re(f′/f)(0) ≤ 24(log B + 1)`. Proof: if a zero
+  is in the inner disk, factor it through `dslope` and recurse with constant `B/2`; otherwise `f` has a
+  logarithm with `Re g ≤ log B` and Borel–Carathéodory [9,10] bounds `g′(0)`. This replaces finite zero
+  products and Cauchy integrals by an 872-token induction.
+* **Bridge.** `Re(ζ₁′/ζ₁) = Re((s−1)⁻¹) + Re Σ Λ(n)n^{−s}` on `Re > 1`
+  (`LSeries_vonMangoldt_eq_deriv_riemannZeta_div`), connecting (S2) with (S3).
+* **Assembly.** Set `a = Re s + 5d` with `d = 2⁻²⁰/log R`. Then the witness sits at distance exactly `5d`
+  (`x = (5d)⁻¹` is sharp), and the premise `1−d ≤ Re s` gives `4d ≤ a−1`, bounding the real-centre pole by
+  `(4d)⁻¹`. With the low-height exclusion of (S1), the middle pole terms are `O(d)`, and the 3–4–1 inequality
+  produces negative margin `0.05/d ≥ 5·10⁴ log R` against an `O(log R)` error budget — so the closing
+  `linarith` is robust to crude estimates.
 
 ---
 
-## 5 The core technique: recursive zero peeling (872 tokens)
+## 4 Successive record artifacts
 
-### 5.1 The statement
+All five were accepted by the official comparator with standard axioms and carry `kept = true` on the public
+curve. Table (local token counts; official scores from the public board):
 
-For `f : ℂ → ℂ` entire with `f 0 ≠ 0`, a one-sided growth constant `B` on `|w| ≤ 1/2`, all zeros in the
-closed left half-plane, and a witness zero `ρ` in the disk `|ρ| ≤ 1/6` with `x ≤ Re((−ρ)⁻¹)`:
+| record # | attempt | artifact | tokens | official score | `running_best_pct` | lineage label |
+|---:|---|---|---:|---:|---:|---|
+| — | 96263 | previous record holder (Pi) | 3,286 | 64.5215 | 85.68 | — |
+| 1 | 96272 | `Lean/record-96272/` | 3,274 | 64.5332 | 85.73 | prescribed-gap / further-weighted |
+| 2 | 96276 | `Lean/fixes/localcert-fix/` | 3,208 | 64.6400 | 86.03 | local-certificate (repaired) |
+| 3 | 96281 | `Lean/record-96281/` | 3,065 | 64.8928 | 86.64 | root-window |
+| 4 | 96282 | `Lean/record-96282/` | 3,014 | 64.9800 | 86.87 | fused windows |
+| 5 | 96283 | `Lean/smallest-scored-96283/` | 2,931 | 65.1339 | 87.24 | complex identity |
 
-```
-x − Re(f′/f)(0) ≤ 24·(log B + 1).
-```
+The following subsections describe the structural advance of each record artifact.
 
-The hypotheses are exactly what the application can supply: `f := ζ₁(z + ·)` is entire, `f 0 ≠ 0` because
-`ζ` does not vanish on `Re > 1` [8], the zero set is left of `Re = 0` because `ζ` does not vanish on
-`Re ≥ 1`, and the witness is the putative zero `s` at distance `5d` — see §6.3.
+### 4.1 Record 1 (3,274): prescribed gaps and the weighted certificate
 
-### 5.2 The proof
+The previous record holder used a window bound whose witness value was `x = 0` for all three evaluation
+heights and paid for the middle height with a large pole term. This artifact **prescribes the gap**: the
+witness zero is placed at a prescribed distance from the centre, so the middle window's `x` becomes a sharp
+`(5d)⁻¹` rather than `0`, and the 3–4–1 combination is rebalanced accordingly. The mathematical content is
+the observation that the classical argument does not need the zero to be *inside* the disk — it needs the
+*distance* to be controlled, and controlling it by prescription removes a case distinction in the assembly.
 
-Induct on `n` where `B < 2ⁿ`.
+### 4.2 Record 2 (3,208): local certificate and the adaptive scale
 
-*Peel.* If a zero `ρ` of `f` lies in the inner disk, use the analytic divided difference:
-`f w = (w − ρ)·dslope f ρ w`. The factor `dslope f ρ` is entire, nonzero at `0`, and on the outer disk it
-satisfies `‖dslope f ρ w‖ ≤ (B/2)‖dslope f ρ 0‖` — the factor `1/2` is exactly the gain from cancelling the
-distance to `ρ` against the growth radius. Recurse on `dslope f ρ`, then add back `Re(−ρ⁻¹)` from
-`f′/f = (·−ρ)′/(·−ρ) + (dslope f ρ)′/(dslope f ρ)`.
+This artifact reorganizes the assembly around a **local certificate**: the low-height exclusion and the three
+window instantiations are derived inside the final theorem from the Mellin formula, rather than by separate
+lemmas with their own interfaces. Its mathematical step is the **adaptive scale** `a = Re s + 5d` with
+`d = 2⁻²⁰/log R`: the scale is tied to the *assumed* real part rather than to a fixed `1+4d`, so the witness
+distance is exactly `5d` for every candidate zero, and the two branch conditions (`a > 1` and `a − 1 ≥ 4d`)
+are discharged by the single premise `1 − d ≤ Re s`. (This artifact also required a formal repair: a `def`
+kept its body invisible to `linarith`, so the von Mangoldt certificate and the window bounds used
+syntactically different atoms of the same quantity; a `change` re-expressed the certificate in the goal's
+atoms. The mathematical statement was unaffected.)
 
-*Close.* If `f` has no zero in the inner disk, `logDeriv f` is exact there; `f` has an analytic logarithm
-`g` with `Re g ≤ log B`, and the Borel–Carathéodory inequality [9,10] bounds `|g′(0)|` by `2Re g(0)/R` with
-`R = 1/2`. A Lipschitz estimate at `0` then converts `(f′/f)(0) = g′(0)` into the stated bound.
+### 4.3 Record 3 (3,065): root-window reorganization
 
-The recursion enumerates zeros *implicitly*: no product formula, no contour integral, no case analysis on
-the number of zeros. This is why it replaces the reference's zero-factorization machinery, and why the
-constant `24` (rather than the textbook `25` or `26`) is achievable: the witness disk `1/6` and growth disk
-`1/2` are chosen so that both branches consume the same bound.
+The third artifact consolidates the two functions that the low-height exclusion serves — bounding the pole
+terms and excluding zeros in the inner disk — into a single **root window** applied once at the pole `s = 1`
+side rather than at each height. Structurally this removes one instantiation of the window lemma and one
+`have`-block of arithmetic; mathematically it exploits that the only information needed about the middle
+height is an upper bound on `Re(((a+i·Im s) −1)⁻¹)`, which follows from `|Im s| ≥ 1/2` without a separate
+window.
 
-### 5.3 Lean realization
+### 4.4 Record 4 (3,014): fused windows and sharp pole bounds
 
-`dslope` gives the factorization definitionally (`sub_smul_dslope_of_zero`), differentiability descends via
-`differentiableOn_dslope`, the growth transfer is `norm_le_of_forall_mem_frontier_norm_le` (maximum
-modulus), and the logarithm branch uses `logDeriv_eqOn_iff` plus `borelCaratheodory_zero`. Cost: **872
-tokens**, no auxiliary zero lemmas, and — with this lemma in place — the whole file contains 10 top-level
-declarations.
+This artifact **fuses** the window lemma into the assembly and replaces the crude pole bound
+`Re((z−1)⁻¹) ≤ 2` by the sharp `Re((z−1)⁻¹) ≤ |Im z|⁻¹` (via `re_le_norm`, `norm_inv`, `abs_im_le_norm`).
+The mathematical gain is a sharper constant in the assembly: the pole terms are bounded by `|γ|⁻¹ ≤ 2` and
+by `(2|γ|)⁻¹`, and the low-height information is used directly in the inequality chain rather than through a
+lemma interface. Measured consequence: the final theorem's body is 1,084 tokens and there is no separate
+window lemma.
 
-### 5.4 The published technique
+### 4.5 Record 5 (2,931): a single complex identity
+
+The record artifact replaces the last remaining pair of separate derivations — the entire formula and the
+zero exclusion near `s = 1` — by one **complex identity** carried through the assembly, so that the growth
+bound, the low-height exclusion and the von Mangoldt substitution all read off the same `remainder` object.
+Structurally: 16 top-level blocks, of which the assembly is 1,038 tokens, the peeling lemma 872, the Mellin
+module 742, and the bridge 78; the rest (201 tokens) is witness/Mellin glue. The technique was distilled by
+the benchmark site as `core1_borel_dslope`, reproduced verbatim in §5.
+
+### 4.6 The published technique
 
 > **`core1_borel_dslope` — "Borel–Carathéodory + Divided-Difference (DSlope) Zero Factorization"**
-> (submission 96283; category *Complex Analysis · Mathlib Reuse*).
+> (created for submission 96283).
 >
 > *English.* "Instead of carrying 21 files of hand-rolled Cauchy integral and Euler–Maclaurin estimates,
 > this proof factors out a putative zero ρ directly via Mathlib's `DSlope` (analytic divided difference) and
@@ -184,138 +172,60 @@ declarations.
 > （200 行）内闭合 `−(ζ′/ζ).re` 估计；再用 Lean 4 广义不等式改写 `grw` 一步压平 3-4-1 三角放缩链，
 > 省去大量中间引理。」
 >
-> *Key signals*: `BorelCaratheodory`, `differientiableOn_dslope`, `grw`, `ZetaAsymp`. *Compression*:
-> 21 → 1 files, −87.2 % tokens.
+> *Key signals*: `BorelCaratheodory`, `differentiableOn_dslope`, `grw`, `ZetaAsymp`. *Compression*: 21 → 1
+> files, −87.2 % tokens.
 
 ---
 
-## 6 Completing the argument
+## 5 Why the sequence converges: compression mechanisms
 
-### 6.1 The von Mangoldt bridge (78 tokens)
+1. **Replace re-derivation by library primitive.** The peeling lemma (872 tokens) replaces zero factorization
+   and contour estimates; the Mellin formula (742 tokens) replaces Euler–Maclaurin expansions. Together they
+   are 1,614 of the final 2,931 tokens, while the reference spends 21 files on exactly these.
+2. **Choose scales that make estimates crude.** `d = 2⁻²⁰/log R` gives negative margin `0.05/d ≥ 5·10⁴ log R`
+   against `O(log R)` error. Sharp estimates are unnecessary, so the code avoids the reference's sharp but
+   verbose bounds.
+3. **Fuse interfaces and automate.** Window bounds are inlined; inequalities are normalized by `grw` and
+   closed by `linarith`/`nlinarith`; the file has 10 top-level declarations and 55 `have`s, with tactic
+   profile `simp` 38, `linarith` 18, `grind` 14, `norm_num` 10.
 
-On `Re z > 1`, `Re(ζ₁′/ζ₁)(z) = Re((z−1)⁻¹) + Re Σ Λ(n)n^{−z}`
-(`LSeries_vonMangoldt_eq_deriv_riemannZeta_div`). This is what turns the §5 bounds on `ζ₁′/ζ₁` into
-statements about `D` in the 3–4–1 inequality.
-
-### 6.2 Window bounds
-
-Apply §5 at the three heights `v ∈ {0, Im s, 2·Im s}` with growth ratio `B = R⁸/‖ζ₁(a+iv)‖`, using §4 for
-the growth hypothesis and §6.1 for the zero hypothesis. For the middle height the witness is the putative
-zero itself, at distance `a − Re s`.
-
-### 6.3 Adaptive scale and the arithmetic
-
-Set `R = |Im s| + 2`, `d = 2⁻²⁰/log R` (so `d ≤ 1/100`), and **`a = Re s + 5d`**. Then:
-
-* the witness sits at distance exactly `5d`, so `x = (5d)⁻¹` is sharp;
-* the hypothesis `1 − d ≤ Re s` gives `4d ≤ a − 1`, so the real-centre pole term `(a−1)⁻¹ ≤ (4d)⁻¹`;
-* the low-height exclusion of §4 bounds the middle pole term:
-  `Re((a+i·Im s −1)⁻¹) ≤ 5d/((4d)²+(1/2)²) ≤ 20d`, and similarly for `2·Im s`.
-
-Combining the three window bounds `r, t, u` as `3r + 4t + u`, the log-derivative certificate
-`3D(a) + 4D(a+it) + D(a+2it) ≥ 0` (from §6.1 with the 3–4–1 pointwise inequality) and Mathlib's product
-formulation [`norm_LFunction_product_ge_one`] yields
-
-```
-4/(5d) − 192·(log log R + 20 log 2)  ≤  3/(4d) + 4·20d + 20d + 192·(8 log R + 1).
-```
-
-The left margin is `(4/5 − 3/4)/d = 0.05/d = 0.05·2²⁰·log R ≥ 5·10⁴ log R`, while the right side beyond the
-pole terms is `O(log R)` — since `log R ≥ Real.log 2 > 0.69`, a single `linarith` with `Real.log_le_self`
-and `Real.log_two_lt_d9` closes the contradiction. **The record-breaking economy is here:** because
-`d = 2⁻²⁰/log R` makes the negative margin astronomical, all estimates may be crude (`20d` for a pole
-term!), which is what allows the code to avoid the reference's sharp but verbose bounds.
+**Ablation.** The natural Euler–Maclaurin route to (S1) — prove
+`Σ[(n+1)^{1−s} − (n+2)^{1−s} − (s−1)(n+1)^{−s}] = 1 − ζ₁(s)` and bound the series — costs
+264 + 540 + 95 + 158 = **1,057 tokens** versus ≈715 for Mellin, and yields no cheap zero exclusion. Two valid
+mathematical routes differ by ~50 % in formal cost: the compression is structural, not cosmetic.
 
 ---
 
-## 7 Why it breaks the record: token accounting
+## 6 Official evaluation
 
-### 7.1 Component budget (2,931 tokens)
-
-| component | tokens | share | role |
-|---|---:|---:|---|
-| assembly (§6.3) | 1,038 | 35.4 % | the analytic-number-theory content |
-| peeling lemma (§5) | 872 | 29.7 % | replaces zero factorization + contour estimates |
-| Mellin formula (§4) | 742 | 25.3 % | replaces Euler–Maclaurin growth machinery |
-| von Mangoldt bridge (§6.1) | 78 | 2.7 % | converts to 3–4–1 |
-| witness, Mellin lemmas, preamble | 201 | 6.9 % | glue |
-
-Against `T₀ = 21,641` this is **−86.5 %**. The two big items (peeling + Mellin) are precisely the two
-re-derivations eliminated; together they are 1,614 tokens, versus the reference's multi-file analytic
-machinery.
-
-### 7.2 Ablation: the Euler–Maclaurin route is 50 % more expensive
-
-The natural alternative for §4 is Euler–Maclaurin: prove
-`Σₙ[(n+1)^{1−s} − (n+2)^{1−s} − (s−1)(n+1)^{−s}] = 1 − ζ₁(s)` and bound the series. Measured cost: term
-bound **264**, growth theorem **540**, integral identity **95**, auxiliary **158** = **1,057 tokens**,
-versus ≈715 for Mellin — and it does not yield the cheap zero exclusion of §4(2). Both routes are
-mathematically valid; the formal cost differs by ~50 %. This is the clearest evidence that the
-record-breaking compression is *structural*.
-
-### 7.3 Two further structural decisions
-
-* **Fusion**: the three window bounds are inlined into the assembly (no separate `scaledWindow` lemma),
-  saving the lemma's interface and its instantiation.
-* **Automation**: inequalities are closed by `linarith`/`nlinarith` after a `grw` normalization, rather
-  than by chains of helper lemmas; the file has 55 `have`s and 10 top-level declarations, with tactic
-  profile `simp` 38, `linarith` 18, `grind` 14, `norm_num` 10, `grw`.
+Scores and curve statistics for all submissions of the account are given in §4's table and in
+`docs/EVIDENCE.md`: the record sequence is 64.5332 → 64.6400 → 64.8928 → 64.9800 → 65.1339, with
+`running_best_pct` 85.73 → 86.03 → 86.64 → 86.87 → 87.24. Earlier submissions (3,315 tokens, score 64.4685)
+were not kept; a 2,843-token artifact was submitted with scoring pending at release. Two artifacts
+(3,242 and 2,880 tokens) compile locally with clean axioms but were **rejected by the official comparator**;
+they are archived as a validity boundary. Inverting the official score formula reproduces the token counts
+to ±8 (e.g. 65.1339 ⇒ ≈2,932 vs 2,931), validating the accounting used here.
 
 ---
 
-## 8 Official evaluation
+## 7 Discussion and conclusion
 
-### 8.1 Results
+The five record artifacts are best read as a *single* mathematical construction acquiring a better interface
+at each step: prescribe the witness gap; tie the scale to the assumed real part; use the pole side for the
+low-height information; fuse the windows and sharpen the pole bounds; finally, carry one identity through the
+assembly. None of the steps changes the theorem; each removes a layer of interface or a distinction that the
+classical proof does not need. The general lesson for formalized analysis is that **proof size is dominated
+by re-derivation and interface overhead, and library-native reformulation is the way to compress it**.
+Limitations: one pillar (1/5) of a formalization programme, not the Riemann Hypothesis; tokens are a
+benchmark-specific proxy for structure, not a measure of mathematical depth; several savings are Mathlib-API
+savings, so the result measures library/proof co-maturity. Next steps target 2,500 tokens: weaken the
+low-height exclusion (`|Im s| ≥ 1/2` → `|Im s| ≥ 32d`) with a two-branch scale (≈ −110), merge the two
+logarithmic inputs into one von Mangoldt object (≈ −130), and restate the peeling lemma with `logDeriv`
+(≈ −100).
 
-| attempt | artifact | official score | curve `kept` | `running_best_pct` | tokens (local ≈ official) |
-|---|---|---|---:|---|---:|
-| **96283** | 2,931-token artifact | **65.1339** | **true** | **87.24** | **2,931** |
-| 96282 | 3,014 tokens | 64.98 | true | 86.87 | 3,014 |
-| 96281 | 3,065 tokens | 64.8928 | true | 86.64 | 3,065 |
-| 96276 | 3,208 tokens (repaired) | 64.64 | true | 86.03 | 3,208 |
-| 96272 | 3,274 tokens | 64.5332 | true | 85.73 | 3,274 |
-| 96286 | 2,843 tokens | pending | — | — | 2,843 |
-
-Public board at snapshot: leader Yin-Kai Yu (余荫铠), `top_score = 65.1339`, site-displayed
-`best_tokens = 2762`; the curve rose 85.68 → 85.73 → 86.03 → 86.64 → 86.87 → 87.24 across our submissions.
-
-### 8.2 Verification
-
-Every artifact is kernel-checked (`#print axioms AlpogeRHCore1.zeroFreeRegion` =
-`[propext, Classical.choice, Quot.sound]`, no `sorry`) and replayed by the official comparator. Two
-artifacts (3,242 and 2,880 tokens) compiled locally with clean axioms but were **rejected by the official
-comparator**; they are archived as a validity boundary — local checking is necessary but not sufficient.
-
-### 8.3 Metric calibration
-
-Inverting the score formula reproduces the official token count: 96272 → 3,277 vs local 3,274;
-96276 → 3,215 vs 3,208; 96282 → 3,019 vs 3,014; 96283 → 2,932 vs 2,931. Agreement to ±8 validates the
-accounting of §7.
-
----
-
-## 9 Discussion
-
-**Three transferable principles.** (P1) *Replace re-derivation by library primitive* — the peeling lemma and
-the Mellin formula; (P2) *choose scales so that estimates may be crude* — the `2⁻²⁰/log R` guarantee turns
-sharpness requirements into slack; (P3) *fuse and automate* — inline interfaces and let decision procedures
-close goals. We expect all three to transfer to other analytic pillars.
-
-**Limitations.** One pillar (1/5) of a formalization programme, not the Riemann Hypothesis. Token count is a
-benchmark-specific proxy, not a measure of mathematical depth; several savings are Mathlib-API savings, so
-the result measures joint library/proof maturity. Progress is non-monotone in acceptance (§8.2).
-
-**Roadmap to 2,500 tokens.** Weaken the low-height exclusion (`|Im s| ≥ 1/2` → `|Im s| ≥ 32d`) with a
-two-branch adaptive scale (≈ −110); merge the two logarithmic inputs into one von Mangoldt object
-(≈ −130); restate the peeling lemma with `logDeriv` (≈ −100).
-
----
-
-## 10 Artifact and reproduction
-
-The artifact contains the proof sources, the normalization token meter (calibrated to ±8 tokens), the
-compile + axiom-audit harness, official evidence snapshots, an independent Case A/B architecture
-(`research/caseAB/`), and both language versions of this paper.
+**Artifact and reproduction.** Repository contents: the five record artifacts plus the rejected and pending
+ones, the token meter, the compile + axiom-audit harness, official evidence snapshots, an independent Case
+A/B architecture, and this paper in English and Chinese.
 
 ```bash
 python3 tools/token_count.py Lean/smallest-scored-96283/Solution.lean   # -> 2931
@@ -324,19 +234,19 @@ LEAN_HOME=... MATHLIB=... tools/compile_solution.sh Lean/smallest-scored-96283/S
 ```
 
 **Provenance.** Results were produced under the account *Yin-Kai Yu (余荫铠)* by a collaborative research
-track in which two AI agent tracks worked together (DeepSeek Harness / Deepseek V4.1-Flash and ChatGPT
-Desktop / GPT-6.2 Astra). The submissions, measurements and this paper are part of that account's record.
+track of two AI agents (DeepSeek Harness / Deepseek V4.1-Flash and ChatGPT Desktop / GPT-6.2 Astra); the
+submissions, measurements and this paper belong to that account's record.
 
 **Citation.**
 
 ```bibtex
-@misc{yu2026zfrmath,
+@misc{yu2026zfrcompress,
   author       = {Yu, Yin-Kai},
-  title        = {Why It Fits: The Mathematical Structure of a 2,931-Token Lean 4 Proof of the Classical Zero-Free Region},
+  title        = {Library-Native Proof Compression: Successive Record Formalizations of the Classical Zero-Free Region in {Lean}~4},
   year         = {2026},
   howpublished = {GitHub repository, artifact release v1.0},
   url          = {https://github.com/YinkaiYu/riemann-hypothesis-zero-free-region-lean4},
-  note         = {Technique core1_borel_dslope; submission 96283, official score 65.1339, curve kept=true},
+  note         = {Five record refreshes; best official score 65.1339 (submission 96283), curve kept=true},
 }
 ```
 
@@ -354,26 +264,23 @@ Desktop / GPT-6.2 Astra). The submissions, measurements and this paper are part 
 [10] C. Carathéodory, *Über den Variabilitätsbereich…*, Math. Ann. 64 (1907), 95–115.
 [11] H. von Mangoldt, *Zu Riemann's Abhandlung …*, J. Reine Angew. Math. 114 (1895), 255–305.
 [12] L. Alpöge, *A Lean 4 formalization of the Riemann Hypothesis* (archive `alpo.ge`), 2025.
-[13] Agentic Science Challenge, *Lean 4 Verification (RH Core Pillar 1/5)*, challenge `lean-4-verification-rh-core-pillar-1-5-classical-z-c7f72729`.
-[14] Public Proof Compression Progress Curve, <https://riemann.verifytask.cn/> (incl. technique `core1_borel_dslope`), 2026.
+[13] Agentic Science Challenge, *Lean 4 Verification (RH Core Pillar 1/5)* (baseline `T₀ = 21,641`), 2026.
+[14] Public Proof Compression Progress Curve, <https://riemann.verifytask.cn/>, 2026.
 
 ## Appendix A. Mathlib declarations used
 
-| declaration | file (pinned commit) |
-|---|---|
-| `borelCaratheodory_zero` | `Analysis/Complex/BorelCaratheodory.lean:86` |
-| `norm_deriv_le_div_of_mapsTo_ball` | `Analysis/Complex/Schwarz.lean:250` |
-| `differentiableOn_dslope` | `Analysis/Complex/RemovableSingularity.lean:60` |
-| `logDeriv_eqOn_iff`, `logDeriv_mul` | `Analysis/Calculus/LogDeriv.lean` |
-| `integral_Ioi_cpow_of_lt` | `Analysis/SpecialFunctions/ImproperIntegrals.lean:251` |
-| `LSeries_vonMangoldt_eq_deriv_riemannZeta_div` | `NumberTheory/LSeries/Dirichlet.lean:434` |
-| `norm_LFunction_product_ge_one` | `NumberTheory/LSeries/Nonvanishing.lean:310` |
-| `deriv_riemannZeta_eq_neg_inv_sub_sq_mul_add` | `NumberTheory/Harmonic/ZetaAsymp.lean:585` |
+`borelCaratheodory_zero` (`Analysis/Complex/BorelCaratheodory.lean:86`),
+`norm_deriv_le_div_of_mapsTo_ball` (`Analysis/Complex/Schwarz.lean:250`),
+`differentiableOn_dslope` (`Analysis/Complex/RemovableSingularity.lean:60`),
+`logDeriv_eqOn_iff`, `logDeriv_mul` (`Analysis/Calculus/LogDeriv.lean`),
+`integral_Ioi_cpow_of_lt` (`Analysis/SpecialFunctions/ImproperIntegrals.lean:251`),
+`LSeries_vonMangoldt_eq_deriv_riemannZeta_div` (`NumberTheory/LSeries/Dirichlet.lean:434`),
+`norm_LFunction_product_ge_one` (`NumberTheory/LSeries/Nonvanishing.lean:310`),
+`deriv_riemannZeta_eq_neg_inv_sub_sq_mul_add` (`NumberTheory/Harmonic/ZetaAsymp.lean:585`).
 
 ## Appendix B. Artifact manifest
 
-`Lean/smallest-scored-96283/` (2,931 tokens, official 65.1339), `Lean/record-96282/`,
-`Lean/record-96281/`, `Lean/fixes/localcert-fix/` (3,208-token repair, official 64.64),
-`Lean/record-96272/`, `Lean/smallest-verified/` (2,843 tokens, pending),
-`Lean/failed-96274-v22.lean`, `research/caseAB/`, `tools/`, `evidence/`, `docs/`,
+`Lean/record-96272/`, `Lean/fixes/localcert-fix/`, `Lean/record-96281/`, `Lean/record-96282/`,
+`Lean/smallest-scored-96283/` (the five record artifacts), `Lean/smallest-verified/` (2,843 tokens,
+pending), `Lean/failed-96274-v22.lean` (rejected), `research/caseAB/`, `tools/`, `evidence/`, `docs/`,
 `paper/main_en.md`, `paper/main_zh.md`.

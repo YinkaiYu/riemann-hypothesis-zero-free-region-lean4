@@ -1,7 +1,8 @@
-# Why It Fits — the mathematics behind a record-breaking 2,931-token Lean 4 proof
+# Library-Native Proof Compression — Successive Record Formalizations of the Classical Zero-Free Region in Lean 4
 
-**A research paper (English + 中文) explaining *why* the compressed proof of the classical zero-free
-region works — with the proof, the token accounting, and the official record.**
+**Research paper (English + 中文): how a 21-file, 21,641-token reference formalization of the classical
+de la Vallée Poussin zero-free region became a single 2,931-token file — five record refreshes, each traced
+to its structural insight.**
 
 **Yin-Kai Yu (余荫铠)** · DeepSeek Harness × ChatGPT Desktop collaborative research track
 <https://github.com/YinkaiYu/riemann-hypothesis-zero-free-region-lean4>
@@ -17,38 +18,27 @@ region works — with the proof, the token accounting, and the official record.*
 
 ---
 
-## Abstract
+## The record sequence (each `kept = true` on the public curve)
 
-The classical zero-free region of the Riemann zeta function is a textbook theorem whose reference Lean 4
-formalization occupies 21 files and 21,641 normalized tokens. This paper explains the **mathematics** of a
-proof of the same theorem that fits in **one file of 2,931 tokens** and holds the record on the public
-proof-compression board (official score 65.1339, curve flag `kept = true`, `running_best_pct` 87.24).
-The compression is structural, not cosmetic:
+| record | attempt | artifact | tokens | official score | `running_best_pct` | structural advance |
+|---:|---|---|---:|---:|---:|---|
+| — | 96263 | previous holder (Pi) | 3,286 | 64.5215 | 85.68 | — |
+| 1 | 96272 | [`Lean/record-96272/`](Lean/record-96272/) | 3,274 | 64.5332 | 85.73 | prescribed witness gap; rebalanced weighted certificate |
+| 2 | 96276 | [`Lean/fixes/localcert-fix/`](Lean/fixes/localcert-fix/) | 3,208 | 64.6400 | 86.03 | local certificate; adaptive scale `a = Re s + 5d`, `d = 2⁻²⁰/log R` |
+| 3 | 96281 | [`Lean/record-96281/`](Lean/record-96281/) | 3,065 | 64.8928 | 86.64 | root-window reorganization at the pole side |
+| 4 | 96282 | [`Lean/record-96282/`](Lean/record-96282/) | 3,014 | 64.9800 | 86.87 | fused windows; sharp pole bound `|Im z|⁻¹` |
+| 5 | 96283 | [`Lean/smallest-scored-96283/`](Lean/smallest-scored-96283/) | **2,931** | **65.1339** | **87.24** | one complex identity carried through the assembly |
 
-1. **One Mellin identity replaces the growth machinery.** For `Re s > 0`,
-   `(s−1)ζ(s) = s(1 − (s−1)R(s))` with `‖R(s)‖ ≤ 1/Re s`. It yields, in ≈715 tokens, both the polynomial
-   growth bound used by the logarithmic-derivative estimate *and* a two-line exclusion of zeros near
-   `s = 1` that the classical argument needs at low heights.
-2. **A recursive zero-peeling lemma replaces zero factorization** (872 tokens). Factor a putative zero
-   through Mathlib's analytic divided difference `dslope`, recurse on the divided difference with a halved
-   growth constant, close with Borel–Carathéodory. This replaces the reference's finite zero products and
-   contour estimates by a single induction — and is the technique published on the benchmark site as
-   `core1_borel_dslope`.
-3. **The assembly chooses a scale that makes every estimate crude and still decisive.** With
-   `a = Re s + 5d`, `d = 2⁻²⁰/log R`, the witness zero sits exactly `5d` from the centre (`x = (5d)⁻¹` is
-   sharp), the real-centre pole term is `≤ (4d)⁻¹`, and the negative margin in the 3–4–1 inequality is
-   `0.05/d ≥ 5·10⁴ log R` against an `O(log R)` error budget — so pole terms may be bounded by `20d` and one
-   `linarith` closes the proof.
+**Compression:** 21,641 → 2,931 normalized tokens (−86.5 %) in one file. The mathematical core is the same
+throughout — a Mellin entire formula for `(s−1)ζ(s)` (growth + cheap zero exclusion near `s = 1`), a
+recursive **zero-peeling lemma** (analytic divided difference `dslope` + Borel–Carathéodory) replacing finite
+zero products and contour estimates, and a von Mangoldt bridge into the classical 3–4–1 inequality — and each
+record step improves the *interface* between these parts or the arithmetic assembly. An ablation shows the
+natural Euler–Maclaurin growth route costs **1,057** tokens versus ≈715 for Mellin (≈50 % more): the
+compression is structural, not cosmetic.
 
-**Why it breaks the record**: the two eliminated re-derivations (peeling + Mellin) account for 1,614 of the
-remaining 2,931 tokens, while the reference spends its 21 files on exactly those. An ablation confirms the
-structural nature of the gain: the natural Euler–Maclaurin route costs **1,057** tokens versus ≈715 for
-Mellin (≈50 % more) and yields no cheap zero exclusion.
-
-Official results (public curve): submissions 96272 / 96276 / 96282 / 96283 are `kept = true` record
-refreshes — scores 64.5332 → 64.64 → 64.98 → **65.1339**, with `running_best_pct` rising 85.73 → 86.03 →
-86.87 → **87.24**; a 2,843-token artifact was submitted with scoring pending at release. Full tables in
-[`docs/EVIDENCE.md`](docs/EVIDENCE.md).
+**Published technique** (benchmark site, submission 96283): `core1_borel_dslope` — *Borel–Carathéodory +
+Divided-Difference (DSlope) Zero Factorization* — reproduced verbatim (EN + 中文) in both papers.
 
 ---
 
@@ -56,20 +46,17 @@ refreshes — scores 64.5332 → 64.64 → 64.98 → **65.1339**, with `running_
 
 | what | where |
 |---|---|
-| **Paper (English)** — the mathematical structure, section by section | [`paper/main_en.md`](paper/main_en.md) |
-| **论文（中文）** — 同样的数学，中文表述 | [`paper/main_zh.md`](paper/main_zh.md) |
-| **Record artifact** — 2,931 tokens, official 65.1339, `kept=true` | [`Lean/smallest-scored-96283/Solution.lean`](Lean/smallest-scored-96283/Solution.lean) |
-| Record lineage | [`Lean/record-96282/`](Lean/record-96282/), [`Lean/record-96281/`](Lean/record-96281/), [`Lean/fixes/localcert-fix/`](Lean/fixes/localcert-fix/) (3,208-token repair, official 64.64), [`Lean/record-96272/`](Lean/record-96272/) |
-| Smallest verified (2,843 tokens, score pending) + rejected artifact | [`Lean/smallest-verified/`](Lean/smallest-verified/), [`Lean/failed-96274-v22.lean`](Lean/failed-96274-v22.lean) |
-| Independent Case A/B architecture (validated alternative) | [`research/caseAB/`](research/caseAB/) |
+| Paper (English) | [`paper/main_en.md`](paper/main_en.md) |
+| 论文（中文） | [`paper/main_zh.md`](paper/main_zh.md) |
+| Five record artifacts | [`Lean/record-96272/`](Lean/record-96272/), [`Lean/fixes/localcert-fix/`](Lean/fixes/localcert-fix/), [`Lean/record-96281/`](Lean/record-96281/), [`Lean/record-96282/`](Lean/record-96282/), [`Lean/smallest-scored-96283/`](Lean/smallest-scored-96283/) |
+| Smallest verified (2,843 tokens, pending) · rejected artifact | [`Lean/smallest-verified/`](Lean/smallest-verified/), [`Lean/failed-96274-v22.lean`](Lean/failed-96274-v22.lean) |
+| Independent Case A/B architecture | [`research/caseAB/`](research/caseAB/) |
 | Token meter + compile/axiom-audit harness | [`tools/`](tools/) |
 | Official evidence snapshots | [`evidence/`](evidence/) · [`docs/EVIDENCE.md`](docs/EVIDENCE.md) |
-| Extended technical notes | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
+| Extended notes | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
 | Citation metadata | [`CITATION.cff`](CITATION.cff) · [`paper/references.bib`](paper/references.bib) |
 
----
-
-## Reproduce in two commands
+## Reproduce
 
 ```bash
 python3 tools/token_count.py Lean/smallest-scored-96283/Solution.lean      # -> 2931
@@ -78,25 +65,22 @@ LEAN_HOME=/path/to/lean-4.34.1-linux MATHLIB=/path/to/mathlib4 \
 #   expected: compile rc=0;  #print axioms -> [propext, Classical.choice, Quot.sound]
 ```
 
----
-
 ## Provenance
 
 The results were produced under the account *Yin-Kai Yu (余荫铠)* by a collaborative research track in which
 two AI agent tracks worked together (DeepSeek Harness / Deepseek V4.1-Flash and ChatGPT Desktop /
-GPT-6.2 Astra). The submissions, measurements and this paper are part of that account's record. Rejected
-artifacts and pending scores are reported as such (paper §8.2).
+GPT-6.2 Astra). Rejected artifacts and pending scores are reported as such.
 
 ## How to cite
 
 ```bibtex
-@misc{yu2026zfrmath,
+@misc{yu2026zfrcompress,
   author       = {Yu, Yin-Kai},
-  title        = {Why It Fits: The Mathematical Structure of a 2,931-Token Lean 4 Proof of the Classical Zero-Free Region},
+  title        = {Library-Native Proof Compression: Successive Record Formalizations of the Classical Zero-Free Region in {Lean}~4},
   year         = {2026},
   howpublished = {GitHub repository, artifact release v1.0},
   url          = {https://github.com/YinkaiYu/riemann-hypothesis-zero-free-region-lean4},
-  note         = {Technique core1_borel_dslope; submission 96283, official score 65.1339, curve kept=true},
+  note         = {Five record refreshes; best official score 65.1339 (submission 96283), curve kept=true},
 }
 ```
 
