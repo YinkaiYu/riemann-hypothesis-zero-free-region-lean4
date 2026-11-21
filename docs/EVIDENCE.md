@@ -74,3 +74,13 @@ See `evidence/attempts.json`. Notes:
   These are listed as pending and are **not** claimed as results.
 * Playground traces are real session exports validated with `playground trace validate`; they are
   deliberately **not** published in this repository (they contain local paths and private working context).
+
+## 4. Latest progress-curve frontier (screenshots)
+
+Two screenshots of the public *Proof Compression Progress Curve* are archived in `evidence/figures/`:
+`curve-frontier-cn-latest.png` (Chinese UI) and `curve-frontier-en-latest.png` (English UI). At that moment
+the curve reported **179 verified runs and 50 breakthroughs**, and the top of the Core-Pillar-1 frontier was
+annotated with *Core 1: Borel–Carathéodory…* by **Yin-Kai Yu (余荫铠) · Deepseek**, confirming that the record
+line of this account is the current frontier for the pillar. The corresponding board snapshot is
+`evidence/curve-core1-runs.json`; the record sequence and official scores are in §3 above and in §4 of the
+papers.

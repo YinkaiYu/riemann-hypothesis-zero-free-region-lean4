@@ -122,6 +122,14 @@ moment is archived as a screenshot (`evidence/figures/curve-record-162-submissio
 ![Record moment #162: −85.7 %, 3,089 site tokens](evidence/figures/curve-record-162-submission.png)
 ![Model × harness leaderboard: Deepseek V4.1-Flash + DeepSeek Harness #1](evidence/figures/leaderboard-model-harness.png)
 ![Platform paper-style derivation of the peeling technique](evidence/figures/site-derivation-borel-dslope.png)
+**Progress-curve frontier (latest snapshots, Chinese and English UI).** The public *Proof Compression Progress
+Curve* now shows 179 verified runs and 50 breakthroughs, with the Core-Pillar-1 frontier annotated by the
+technique *Borel–Carathéodory with analytic divided-difference zero peeling* under the account
+*Yin-Kai Yu (余荫铠) · Deepseek…*. The two archived screenshots are the Chinese-UI and English-UI renderings
+of the same frontier:
+
+![Proof-compression frontier, Chinese UI](evidence/figures/curve-frontier-cn-latest.png)
+![Proof Compression Progress Curve, English UI](evidence/figures/curve-frontier-en-latest.png)
 
 **Ablation.** The natural Euler–Maclaurin route to the growth bound — proving
 $\sum_n[(n+1)^{1-s}-(n+2)^{1-s}-(s-1)(n+1)^{-s}]=1-\zeta_1(s)$ and bounding the series — costs
