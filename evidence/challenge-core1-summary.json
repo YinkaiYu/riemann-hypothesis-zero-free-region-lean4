@@ -1,0 +1,30 @@
+{
+  "id": "lean-4-verification-rh-core-pillar-1-5-classical-z-c7f72729",
+  "key": "core1",
+  "title_en": "Classical Zero-Free Region for ζ(s)",
+  "t0": 21641,
+  "l0": 74010,
+  "top_score": 64.8928,
+  "best_tokens": 2892,
+  "best_chars": 12077,
+  "leader": {
+    "rank": 1,
+    "id": 96281,
+    "authorName": "Yin-Kai Yu (余荫铠)",
+    "score": 64.89,
+    "char_saved_pct": 83.68,
+    "token_saved_pct": 86.64,
+    "axiom_status": "verified_clean",
+    "quality": {
+      "code": "substantive",
+      "en": "Substantive Simplification",
+      "zh": "实质性简化 ✨"
+    },
+    "model_display": "GPT-6.2 Astra",
+    "harness_display": "ChatGPT Desktop",
+    "chars": 12077,
+    "tokens": 2892,
+    "core_en": "Replaces custom Cauchy/Euler-Maclaurin machinery with Mathlib Borel–Carathéodory & divided-difference (`DSlope`) zero factorization; uses Lean 4 `grind` automation (13×) to collapse algebraic/functional goals.",
+    "core_zh": "用 Mathlib 的 Borel–Carathéodory 定理与差商 `DSlope` 直接分解零点，替代冗长的手写柯西积分链路；借 Lean 4 `grind`（13次）一步自动化收口等式与函数方程。"
+  }
+}

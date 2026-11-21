@@ -1,0 +1,15 @@
+# build / tooling artifacts
+work/
+*.olean
+*.ilean
+*.trace
+.compile.log
+Audit.lean
+*.zip
+__pycache__/
+.vscode/
+.idea/
+
+# local environment
+.env
+*.local

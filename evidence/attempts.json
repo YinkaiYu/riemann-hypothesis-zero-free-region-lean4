@@ -1,0 +1,104 @@
+[
+  {
+    "id": 96272,
+    "note": "record-refresh vs Pi 96263 (64.5215); running_best_pct 85.73 > 85.68",
+    "score": 64.5332,
+    "kept_on_curve": true,
+    "local_tokens": 3274,
+    "status": "scored",
+    "state": "final"
+  },
+  {
+    "id": 96268,
+    "note": "not kept (Pi ahead)",
+    "score": 64.4685,
+    "kept_on_curve": false,
+    "local_tokens": 3315,
+    "status": "scored",
+    "state": "final"
+  },
+  {
+    "id": 96267,
+    "note": "not kept",
+    "score": 64.4685,
+    "kept_on_curve": false,
+    "local_tokens": 3315,
+    "status": "scored",
+    "state": "final"
+  },
+  {
+    "id": 96252,
+    "note": "early submission",
+    "score": 63.8485,
+    "kept_on_curve": false,
+    "local_tokens": 3707,
+    "status": "scored",
+    "state": "final"
+  },
+  {
+    "id": 96274,
+    "note": "official verification failed",
+    "score": 0,
+    "local_tokens": 3242,
+    "status": "pending_review",
+    "state": "failed"
+  },
+  {
+    "id": 96275,
+    "note": "official verification failed (same artifact)",
+    "score": 0,
+    "local_tokens": 3242,
+    "status": "pending_review",
+    "state": "failed"
+  },
+  {
+    "id": 96276,
+    "note": "repaired WIP (3179-token file failed locally; fixed to 3208)",
+    "score": 64.64,
+    "kept_on_curve": null,
+    "local_tokens": 3208,
+    "status": "scored",
+    "state": "final"
+  },
+  {
+    "id": 96281,
+    "note": "same project, later generated artifact (v23)",
+    "score": 64.89,
+    "kept_on_curve": null,
+    "local_tokens": 3065,
+    "status": "scored",
+    "state": "final"
+  },
+  {
+    "id": 96282,
+    "note": "queued at archive time",
+    "score": null,
+    "local_tokens": 3014,
+    "status": "submitted",
+    "state": "evaluating"
+  },
+  {
+    "id": 96283,
+    "note": "queued at archive time",
+    "score": null,
+    "local_tokens": 2931,
+    "status": "submitted",
+    "state": "evaluating"
+  },
+  {
+    "id": 96284,
+    "note": "queued at archive time",
+    "score": null,
+    "local_tokens": 2880,
+    "status": "submitted",
+    "state": "queued"
+  },
+  {
+    "id": 96286,
+    "note": "smallest verified at archive time; queued",
+    "score": null,
+    "local_tokens": 2843,
+    "status": "submitted",
+    "state": "queued"
+  }
+]
