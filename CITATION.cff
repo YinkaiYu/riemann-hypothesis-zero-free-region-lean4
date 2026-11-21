@@ -1,7 +1,7 @@
 cff-version: 1.2.0
-message: "If you use this proof, its compression route, the tooling, or the evidence data, please cite this repository (see also paper/references.bib and paper/main_en.md / paper/main_zh.md)."
-title: "A 2,931-Token Machine-Checked Proof of the Classical Zero-Free Region for the Riemann Zeta Function"
-abstract: "A complete Lean 4 proof of the classical de la Vallee Poussin zero-free region for zeta(s), compressed from a 21,641-token / 21-file reference formalization to a single 2,931-token file. Official leaderboard results: submissions 96272/96276/96282/96283 carry the public proof-compression curve flag kept=true (best official score 65.1339). The artifact includes proof sources, tooling, official evidence snapshots, full papers in English and Chinese, and an independent case-split proof."
+message: "If you use the artifacts, tooling, or measurements in this repository, please cite it (see also paper/references.bib and paper/main_en.md / paper/main_zh.md)."
+title: "Verifying, Repairing, and Measuring Compressed Formal Proofs: An Independent Track on the Classical Zero-Free Region in Lean 4"
+abstract: "An independent verification, repair and measurement track on the classical de la Vallee Poussin zero-free region for zeta(s) (Lean 4 / Mathlib; reference formalization 21 files, 21,641 normalized tokens). Contributions: a verification pipeline (compile + kernel axiom audit + token measurement calibrated to +/-8 tokens); a repair case study turning a non-compiling 3,179-token work-in-progress into a 3,208-token artifact accepted by official replay (official score 64.64, curve flag kept=true); a measured record of the submitted compressed lineage (2,931-3,315 tokens, official scores 64.47-65.13); an independent Case A/B architecture; and an ablation showing the Euler-Maclaurin growth route costs ~50% more formal tokens than the Mellin route. The compressed proof family and its headline technique were developed by a parallel track in a shared workshop workspace and are reproduced with attribution."
 authors:
   - family-names: "Yu"
     given-names: "Yin-Kai"
@@ -17,8 +17,8 @@ keywords:
   - "Lean 4"
   - "Mathlib"
   - "formal verification"
+  - "proof compression"
+  - "artifact evaluation"
   - "Riemann zeta function"
   - "zero-free region"
-  - "proof compression"
-  - "agentic science challenge"
-  - "Riemann Hypothesis"
+  - "independent verification"
