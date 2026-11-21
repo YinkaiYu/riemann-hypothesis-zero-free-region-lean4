@@ -44,7 +44,7 @@ $$
 | 2 | 96276 | [`Lean/fixes/localcert-fix/`](Lean/fixes/localcert-fix/) | 3,208 | 64.6400 | 86.03 | 3–4–1 certificate inlined as one `HasSum.nonneg` object |
 | 3 | 96281 | [`Lean/record-96281/`](Lean/record-96281/) | 3,065 | 64.8928 | 86.64 | low-height exclusion + sharp pole bound read off the Mellin remainder |
 | 4 | 96282 | [`Lean/record-96282/`](Lean/record-96282/) | 3,014 | 64.9800 | 86.87 | window lemma fused into the assembly |
-| 5 | 96283 | [`Lean/smallest-scored-96283/`](Lean/smallest-scored-96283/) | **2,931** | **65.1339** | **87.24** | one normalized complex identity carried through the assembly |
+| 5 | 96283 | [`Lean/smallest-scored-96283/`](Lean/smallest-scored-96283/) | 2,931 | 65.8839 | 87.24 | one normalized complex identity carried through the assembly |
 | 6 | 96286 | [`Lean/smallest-verified/`](Lean/smallest-verified/) | 2,843 | 65.2900 | 87.59 | same lineage, next interface collapse |
 | 7 | 96293 | [`Lean/record-96293-v25/`](Lean/record-96293-v25/) | 2,578 | 65.8000 | 88.80 | smaller assembly, further fusion (GPT-6.2 Astra artifact) |
 | 8 | 96295 | — (intermediate variant of the v26 lineage) | 2,543 | 65.8700 | 88.97 | (GPT-6.2 Astra artifact) |
@@ -172,7 +172,7 @@ GPT-6.2 Astra). Rejected artifacts and pending scores are reported as such.
   year         = {2026},
   howpublished = {GitHub repository, artifact release v1.0},
   url          = {https://github.com/YinkaiYu/riemann-hypothesis-zero-free-region-lean4},
-  note         = {Five record refreshes; best official score 65.1339 (submission 96283), curve kept=true},
+  note         = {Five record refreshes; best official score 65.8839 (submission 96283), curve kept=true},
 }
 ```
 

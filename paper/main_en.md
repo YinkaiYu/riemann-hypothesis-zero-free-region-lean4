@@ -343,6 +343,20 @@ assembly shrinks from 1,084 to 1,038 tokens: a net saving of 83 tokens, from 3,0
 has sixteen top-level blocks: the assembly (1,038 tokens), the peeling lemma (872), the Mellin module (742),
 the bridge (78), and the witness and glue (201).
 
+### 4.6 Records 6–9: the same mechanisms taken further
+
+After the five artifacts above, the same three mechanisms continued to be applied and the record moved four
+more times within a few hours. The next record was the 2,843-token artifact of submission 96286 (score 65.29,
+`running_best_pct` 87.59). Three further records followed: submission 96293 at about 2,577 tokens (score
+65.80, `running_best_pct` 88.80), submission 96295 at about 2,542 tokens (score 65.87, `running_best_pct`
+88.97), and submission 96308 at about 2,535 tokens (score 65.8834, `running_best_pct` 88.99), which is the
+record at the time of this release. The artifacts of 96293 and 96308 are archived as
+`Lean/record-96293-v25/` (2,580 local tokens) and `Lean/record-96308-v26/` (2,542 local tokens); the artifact
+of 96295 is an intermediate variant of the same lineage and is not separately archived. The mathematical
+content does not change: the reductions continue the pattern of records 3–5 by collapsing the remaining
+interface between the Mellin module and the assembly. Our local token measurements agree with the official
+counts recovered from the scores (for instance, 65.8834 corresponds to about 2,536 official tokens against
+2,542 local). One submission of this period, 96301, was scored zero and is not part of the record sequence.
 ## 5 What explains the compression
 
 Three principles account for the sequence of records.
@@ -377,7 +391,7 @@ evidence that the compression we report is structural rather than cosmetic.
 
 The artifacts of section 4 form the record sequence: the official score rises from 64.5332 through 64.6400, 64.8928, 64.9800 and 65.1339 to 65.8834,
 64.8928, 64.9800 and finally 65.1339, while the running best compression percentage rises from 85.73 to
-86.03, 86.64, 86.87 and 87.24. All five carry the flag `kept = true`.
+86.03, 86.64, 86.87 and 87.24. All nine carry the flag `kept = true`.
 
 **Consistency of the measurements.** Inverting the score formula recovers the official token count from the
 official score; for the final artifact this gives about 2,932 tokens against our local measurement of 2,931,
