@@ -1,0 +1,5 @@
+[15:49:23] build rc=0 wall=547s counts={'compiled': 20} failed=[]
+[15:49:33] audit rc=0
+[15:49:33] audit output: 'AlpogeRHCore5.functorialResolutionCharZero' depends on axioms: [propext, Classical.choice, Quot.sound]
+[15:49:34] package written: /mnt/c/Users/Newton/Documents/LigroupIOP/lib/RH-deepseek/core5-final-audit/green20-clean/delivery/proof (20 modules)
+[15:49:34] RECEIPT {"src": "/home/yyk/rh-deepseek/core5-resume/work/adapted-green20", "work": "/home/yyk/rh-deepseek/core5-final-audit/green20-clean-clean-work", "green": true, "audit_rc": 0, "axioms": ["Classical.choice", "Quot.sound", "propext"], "axiom_ok": false, "entry_module": "Core5.M19FunctorialResolution", "target": "AlpogeRHCore5.functorialResolutionCharZero", "modules": 20, "local_tokens": 1682205, "frozen_cache": "/home/yyk/rh-deepseek/core5-consolidate/frozen-stub/cache", "ts": "2026-11-22 15:49:34"}

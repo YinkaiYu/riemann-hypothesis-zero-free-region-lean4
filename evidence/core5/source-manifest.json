@@ -1,0 +1,28 @@
+{
+ "modules": 20,
+ "local_tokens": 1682205,
+ "interface_import": "ComparatorChallenges.RHCore5Defs",
+ "entry": "AlpogeRHCore5.functorialResolutionCharZero",
+ "sha256": {
+  "Solution": "23ebf5659cf10cd397e5750fc78a14e43c163a1e756197976adadc4332831cc2",
+  "Core5.M19FunctorialResolution": "e7730d890063d229732af1ec5d3fe7f4b5efbcad3b2e5a64100a4b0229b9c2f2",
+  "Core5.M18Principalization": "4661216c6c9ea0d13ad4c5af157816e96a29fe938b2f27d9d2f7cb1162672e16",
+  "Core5.M17DimensionRecursion": "e12a8062127af315b94d3c3e5a374eb54495618995d249d39a4eb40ee70b1859",
+  "Core5.M16DivisorInvariants": "e1baf1aeadb2a8aa68608f86718014978a49a9efa6d3c48ca5261c0af87e4aa1",
+  "Core5.M15MarkedOrderReduction": "839cf9c99a0a9c1ba24e7d261f3bd630050b4abdc34ea1f885cc1ad9c28e49a5",
+  "Core5.M14OrderInduction": "45b651ee2b9037a432b395f02575e68c37b9a5f523098d86e1e76d45db984bdf",
+  "Core5.M13MonomialInvariants": "ccb13f9b79d2e9022651825e5d45e869317d6174f01995c956ba9ecff78bf956",
+  "Core5.M12AdmissibleCenters": "55061265cd8939c472d89db67e57e785e467ef425b9a0e2de1fe5d15bcdb42a0",
+  "Core5.M11ResolutionData": "ef24136cc74ff4cc2d4a85e5b6473735ece410fe3cb877ee3f1e11e9e10cac28",
+  "Core5.M10TransformGeometry": "79ddbb91f7b7bf370efcaf42b1b267fd58b383feb4b3c8184139c23e634e0799",
+  "Core5.M09MaximalContact": "68a823bf9a9aa1c707ec9bb855c1f5930e0262150f4f973e861630b1668ee722",
+  "Core5.M08SmoothCoordinateTransport": "3806e0013f2feaf91b064db73535d6af680605a0380d3bf920ba434f9a7ce253",
+  "Core5.M07BlowupPullback": "c1a2ca3d10032e073cbfef723798980e7711824505497948646f97d49fdcec3f",
+  "Core5.M06MarkedSequences": "5c50d1a48f5d86c050c327a0fd7278f25b1f2804e4b909d576847175fc8f818b",
+  "Core5.M05TransformCharts": "24a29aef1b25d51b46f18eca1af5391b498863752743e3e913de24718698e807",
+  "Core5.M04DescentInterfaces": "144059e9a408b31f90f81cde451a32136e8a2ff1862a8ebefd3cbb4c2fafa60e",
+  "Core5.M03DifferentialIdeals": "aa5fbb469043a579a3de50cefdf575cb35ce69e929eb0f83b1fb5629596eef8f",
+  "Core5.M02EtaleGeometry": "5270de38a3c3b3a7c04f1d4aed01167066731f1c62b5dba513e0826033f58ba5",
+  "Core5.M01Foundations": "0a788bf6f75d5c69a2163e83d61754c38af9877ff0ba6dcad590a55b1ca1e687"
+ }
+}

@@ -1,0 +1,1 @@
+'AlpogeRHCore5.functorialResolutionCharZero' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,32 @@
+{
+ "src": "/home/yyk/rh-deepseek/core5-final-audit/green20-clean-clean-work/src",
+ "cache": "/home/yyk/rh-deepseek/core5-final-audit/green20-clean-clean-work/cache",
+ "modules": 20,
+ "counts": {
+  "compiled": 20
+ },
+ "elapsed_s": 546.3,
+ "failed": [],
+ "by_module": {
+  "Core5.M01Foundations": "compiled",
+  "Core5.M02EtaleGeometry": "compiled",
+  "Core5.M03DifferentialIdeals": "compiled",
+  "Core5.M04DescentInterfaces": "compiled",
+  "Core5.M05TransformCharts": "compiled",
+  "Core5.M06MarkedSequences": "compiled",
+  "Core5.M07BlowupPullback": "compiled",
+  "Core5.M08SmoothCoordinateTransport": "compiled",
+  "Core5.M09MaximalContact": "compiled",
+  "Core5.M10TransformGeometry": "compiled",
+  "Core5.M11ResolutionData": "compiled",
+  "Core5.M12AdmissibleCenters": "compiled",
+  "Core5.M13MonomialInvariants": "compiled",
+  "Core5.M14OrderInduction": "compiled",
+  "Core5.M15MarkedOrderReduction": "compiled",
+  "Core5.M16DivisorInvariants": "compiled",
+  "Core5.M17DimensionRecursion": "compiled",
+  "Core5.M18Principalization": "compiled",
+  "Core5.M19FunctorialResolution": "compiled",
+  "Solution": "compiled"
+ }
+}

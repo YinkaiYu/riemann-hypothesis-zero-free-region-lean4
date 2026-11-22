@@ -162,6 +162,16 @@ Divided-Difference (DSlope) Zero Factorization* — reproduced verbatim (EN + �
 | Extended notes | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
 | Citation metadata | [`CITATION.cff`](CITATION.cff) · [`paper/references.bib`](paper/references.bib) |
 
+## Second pillar: Core 5/5 — verified compressed proof of functorial resolution of singularities
+
+Besides Core Pillar 1/5, this repository publishes a fully machine-checked **consolidated proof of Core
+Pillar 5/5** (`AlpogeRHCore5.functorialResolutionCharZero`): **20 modules, 1,682,205 normalized tokens**
+against a **1,786,589-token** reference closure (5.8 % compression), with a full clean rebuild (20/20
+modules, `rc=0`), a clean axiom audit (`[propext, Classical.choice, Quot.sound]`), zero `sorry`/axioms,
+zero frozen-interface redefinitions, and a matching sha256 delivery manifest. It was submitted as attempt
+97785. Sources: [`Lean/core5/`](Lean/core5/); evidence: [`evidence/core5/`](evidence/core5/);
+write-up: [`docs/CORE5.md`](docs/CORE5.md) and the independent audit protocol in
+[`docs/core5-audit-report.md`](docs/core5-audit-report.md).
 ## Reproduce
 
 ```bash
