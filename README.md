@@ -1,7 +1,7 @@
 # Library-Native Proof Compression — Successive Record Formalizations of the Classical Zero-Free Region in Lean 4
 
 **Research paper (English + 中文): how a 21-file, 21,641-token reference formalization of the classical
-de la Vallée Poussin zero-free region became a single 2,535-token file — nine record refreshes, each traced
+de la Vallée Poussin zero-free region became a single 2,489-token file — twelve record refreshes, each traced
 to its bottleneck, its core derivation, and its measured token delta.**
 
 **Yin-Kai Yu (余荫铠)** · DeepSeek Harness × ChatGPT Desktop collaborative research track
@@ -10,7 +10,7 @@ to its bottleneck, its core derivation, and its measured token delta.**
 [![Lean](https://img.shields.io/badge/Lean-4.34.1-blue)](https://lean-lang.org/)
 [![Mathlib](https://img.shields.io/badge/Mathlib-d13f23b7-green)](https://github.com/leanprover-community/mathlib4)
 [![Kernel verified](https://img.shields.io/badge/kernel--verified-yes-brightgreen)](docs/EVIDENCE.md)
-[![Official score](https://img.shields.io/badge/official%20score-65.88-orange)](docs/EVIDENCE.md)
+[![Official score](https://img.shields.io/badge/official%20score-65.98-orange)](docs/EVIDENCE.md)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
 
 **Paper:** [**English**](paper/main_en.md) · [**中文版**](paper/main_zh.md) · **Cite:** [`CITATION.cff`](CITATION.cff) ·
@@ -49,12 +49,16 @@ $$
 | 7 | 96293 | [`Lean/record-96293-v25/`](Lean/record-96293-v25/) | 2,578 | 65.8000 | 88.80 | smaller assembly, further fusion (GPT-6.2 Astra artifact) |
 | 8 | 96295 | — (intermediate variant of the v26 lineage) | 2,543 | 65.8700 | 88.97 | (GPT-6.2 Astra artifact) |
 | 9 | 96308 | [`Lean/record-96308-v26/`](Lean/record-96308-v26/) | **2,536** | **65.8834** | **88.99** | current record (Deepseek V4.1-Flash) |
+| 10 | 96331 | continuation of the v26 lineage (not separately archived) | 2,524 | 65.9100 | 89.05 | Deepseek V4.1-Flash |
+| 11 | 96336 | continuation of the v26 lineage (not separately archived) | 2,518 | 65.9200 | 89.07 | Deepseek V4.1-Flash |
+| 12 | 96342 | continuation of the v26 lineage (not separately archived) | **2,489** | **65.9800** | **89.07** | Deepseek V4.1-Flash |
+| — | 96572 | held by another participant | 2,223 (site) | **66.4431** | **89.73** | Pi · Gemini 4 Neon |
 
-**Compression.** $T_0/T = 21{,}641/2{,}535 \approx 8.54$, i.e.
+**Compression.** $T_0/T = 21{,}641/2{,}489 \approx 8.69$, i.e.
 
 $$
-\frac{T_0-T}{T_0}\;=\;1-\frac{2{,}535}{21{,}641}\;\approx\;88.3\%,
-\qquad S(2{,}535)\approx 65.88 .
+\frac{T_0-T}{T_0}\;=\;1-\frac{2{,}489}{21{,}641}\;\approx\;88.5\%,
+\qquad S(2{,}489)\approx 65.98 .
 $$
 
 The mathematical core is the same throughout; each record step improves an *interface* or a *distinction*

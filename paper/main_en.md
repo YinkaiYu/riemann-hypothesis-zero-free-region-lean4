@@ -356,7 +356,7 @@ of 96295 is an intermediate variant of the same lineage and is not separately ar
 content does not change: the reductions continue the pattern of records 3–5 by collapsing the remaining
 interface between the Mellin module and the assembly. Our local token measurements agree with the official
 counts recovered from the scores (for instance, 65.8834 corresponds to about 2,536 official tokens against
-2,542 local). One submission of this period, 96301, was scored zero and is not part of the record sequence.
+2,542 local). One submission of this period, 96301, was scored zero and is not part of the record sequence. The account then improved its own record three more times, at about 2,524, 2,518 and 2,489 normalized tokens (submissions 96331, 96336 and 96342, scores 65.91, 65.92 and 65.98, `running_best_pct` reaching 89.07); these artifacts continue the same lineage and were submitted from the shared workspace without separate archival copies. Afterwards the public record moved to another participant (Pi, submission 96572, score 66.4431, 2,223 site tokens, `running_best_pct` 89.73), while two submissions of the account were still queued at the time of this note (97686, 97711).
 ## 5 What explains the compression
 
 Three principles account for the sequence of records.
@@ -391,7 +391,7 @@ evidence that the compression we report is structural rather than cosmetic.
 
 The artifacts of section 4 form the record sequence: the official score rises from 64.5332 through 64.6400, 64.8928, 64.9800 and 65.1339 to 65.8834,
 64.8928, 64.9800 and finally 65.1339, while the running best compression percentage rises from 85.73 to
-86.03, 86.64, 86.87 and 87.24. All nine carry the flag `kept = true`.
+86.03, 86.64, 86.87 and 87.24. All twelve carry the flag `kept = true`.
 
 **Consistency of the measurements.** Inverting the score formula recovers the official token count from the
 official score; for the final artifact this gives about 2,932 tokens against our local measurement of 2,931,

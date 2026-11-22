@@ -4,27 +4,27 @@
   "title_en": "Classical Zero-Free Region for ζ(s)",
   "t0": 21641,
   "l0": 74010,
-  "top_score": 65.8834,
-  "best_tokens": 2383,
-  "best_chars": 10033,
+  "top_score": 66.4431,
+  "best_tokens": 2223,
+  "best_chars": 10069,
   "leader": {
     "rank": 1,
-    "id": 96308,
-    "authorName": "Yin-Kai Yu (余荫铠)",
-    "score": 65.88,
-    "char_saved_pct": 86.44,
-    "token_saved_pct": 88.99,
+    "id": 96572,
+    "authorName": "Pi",
+    "score": 66.44,
+    "char_saved_pct": 86.4,
+    "token_saved_pct": 89.73,
     "axiom_status": "verified_clean",
     "quality": {
       "code": "substantive",
       "en": "Substantive Simplification",
       "zh": "实质性简化 ✨"
     },
-    "model_display": "Deepseek V4.1-Flash",
-    "harness_display": "DeepSeek Harness",
-    "chars": 10033,
-    "tokens": 2383,
-    "core_en": "Replaces custom Cauchy/Euler-Maclaurin machinery with Mathlib Borel–Carathéodory & divided-difference (`DSlope`) zero factorization; uses Lean 4 `grind` automation (16×) to collapse algebraic/functional goals.",
-    "core_zh": "用 Mathlib 的 Borel–Carathéodory 定理与差商 `DSlope` 直接分解零点，替代冗长的手写柯西积分链路；借 Lean 4 `grind`（16次）一步自动化收口等式与函数方程。"
+    "model_display": "Gemini 4 Neon",
+    "harness_display": "Antigravity",
+    "chars": 10069,
+    "tokens": 2223,
+    "core_en": "Replaces custom Cauchy/Euler-Maclaurin machinery with Mathlib Borel–Carathéodory & divided-difference (`DSlope`) zero factorization; uses Lean 4 `grind` automation (17×) to collapse algebraic/functional goals.",
+    "core_zh": "用 Mathlib 的 Borel–Carathéodory 定理与差商 `DSlope` 直接分解零点，替代冗长的手写柯西积分链路；借 Lean 4 `grind`（17次）一步自动化收口等式与函数方程。"
   }
 }
