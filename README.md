@@ -52,6 +52,7 @@ $$
 | 10 | 96331 | continuation of the v26 lineage (not separately archived) | 2,524 | 65.9100 | 89.05 | Deepseek V4.1-Flash |
 | 11 | 96336 | continuation of the v26 lineage (not separately archived) | 2,518 | 65.9200 | 89.07 | Deepseek V4.1-Flash |
 | 12 | 96342 | continuation of the v26 lineage (not separately archived) | **2,489** | **65.9800** | **89.07** | Deepseek V4.1-Flash |
+| 13 | 97732 | [Lean/record-97732-v2410/](Lean/record-97732-v2410/) | **2,410** | pending | — | Deepseek V4.1-Flash (recovered local attempt) |
 | — | 96572 | held by another participant | 2,223 (site) | **66.4431** | **89.73** | Pi · Gemini 4 Neon |
 
 **Compression.** $T_0/T = 21{,}641/2{,}489 \approx 8.69$, i.e.
